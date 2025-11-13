@@ -45,7 +45,7 @@ public class UserService {
     public User update (Long id, UserUpdateRequest request) {
         User user = findById(id);
         
-        //validar que el cordinador no pueda modificar el admin principal
+
         if(id == 1L && isCoordinator()) {
             throw new RuntimeException("No tienes permiso para modificar este usuario");
         }

@@ -25,10 +25,10 @@ public class SubCategoryController {
         return ResponseEntity.ok(subcategoryService.findAll());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{category}/{categoryId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'COORDINADOR')")
-    public ResponseEntity<Subcategory> getSubcategoryById(@PathVariable Long id) {
-        return ResponseEntity.ok(subcategoryService.findById(id));
+    public ResponseEntity<List<Subcategory>> getSubcategoryById(@PathVariable Long id) {
+        return ResponseEntity.ok(subcategoryService.findByCategoryById(id));
     }
     
     @PostMapping
