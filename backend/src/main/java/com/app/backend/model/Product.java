@@ -1,11 +1,7 @@
 package com.app.backend.model;
 
 import jakarta.persistence.*;
-import lombok.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.list;
 
-@Data
 @Entity
 @Table(name = "products")
 public class Product {
@@ -35,9 +31,31 @@ public class Product {
     @JoinColumn(name = "subcategory_id", nullable = false)
     private Subcategory subcategory;
 
+    // Constructores
+    public Product() {
+    }
 
-    public String getName(); {
+    public Product(String name, String description, Double price, Integer stock, Boolean active, Category category, Subcategory subcategory) {
         this.name = name;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
+        this.active = active;
+        this.category = category;
+        this.subcategory = subcategory;
+    }
+
+    // Getters y Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
@@ -92,4 +110,3 @@ public class Product {
         this.subcategory = subcategory;
     }
 }
-

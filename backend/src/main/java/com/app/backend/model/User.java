@@ -3,12 +3,13 @@ package com.app.backend.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
-import java.time.localDateTime;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
 @Table(name = "users")
-public class user {
+
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,51 +32,53 @@ public class user {
     private Boolean active = true;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime created_at = LocalDateTime.now();
 
     public enum Role {
         ADMIN, COORDINADOR
     }
 
-    public void setUsername(String username) {
+    public void setUsername(String username){
         this.username = username;
     }
 
-    public String getUsername() {
+    public String getUsername(){
         return username;
     }
 
-    public viud setPassword(String password) {
+    public void setPassword(String password){
         this.password = password;
     }
 
-    public void setEmail(String email) {
+    public String getPassword(){
+        return password;
+    }
+
+    public void setEmail(String email){
         this.email = email;
     }
 
-    public String getEmail() {
+    public String getEmail(){
         return email;
     }
 
-    public void setRole(Role role) {
+    public void setRole(Role role){
         this.role = role;
     }
 
-    public Role getRole() {
+    public Role getRole(){
         return role;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(Boolean active){
         this.active = active;
     }
 
-    public Boolean getActive() {
+    public Boolean getActive(){
         return active;
     }
 
-    public Long getId() {
+    public Long getId(){
         return id;
     }
-
-
 }

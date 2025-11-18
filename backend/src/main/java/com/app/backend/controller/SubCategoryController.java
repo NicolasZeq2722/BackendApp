@@ -9,47 +9,54 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-
+import javax.print.attribute.standard.Media;
 
 @RestController
 @RequestMapping("/api/subcategories")
 @CrossOrigin(origins = "*")
 public class SubCategoryController {
-
+    
     @Autowired
     private SubCategoryService subcategoryService;
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'COORDINADOR')")
-    public ResponseEntity<List<Subcategory>> getAllSubcategories() {
+    public ResponseEntity<List<Subcategory>>
+    getAllSubcategories() {
         return ResponseEntity.ok(subcategoryService.findAll());
     }
 
-    @GetMapping("/{category}/{categoryId}")
+    @GetMapping("/category/{categoryId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'COORDINADOR')")
-    public ResponseEntity<List<Subcategory>> getSubcategoryById(@PathVariable Long id) {
-        return ResponseEntity.ok(subcategoryService.findByCategoryById(id));
+    public ResponseEntity<List<Subcategory>> getSubcategoriesByCategory(@PathVariable Long categoryId) {
+        return ResponseEntity.ok(subcategoryService.findByCategoryId(categoryId));
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'COORDINADOR')")
+    public ResponseEntity<Subcategory> getSubcategoryById(@PathVariable Long id) {
+        return ResponseEntity.ok(subcategoryService.findById(id));
     }
     
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'COORDINADOR')")
-    public ResponseEntity<Subcategory> createSubcategory(@RequestBody Subcategory subcategory) {
+    public ResponseEntity<Subcategory> createSubcategory
+    (@RequestBody Subcategory subcategory) {
         return ResponseEntity.ok(subcategoryService.create(subcategory));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'COORDINADOR')")
     public ResponseEntity<Subcategory> updateSubcategory(
-            @PathVariable Long id,
-            @RequestBody Subcategory subcategory) {
+        @PathVariable Long id,
+        @RequestBody Subcategory subcategory){
         return ResponseEntity.ok(subcategoryService.update(id, subcategory));
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<MessageResponse> deleteSubcategory(@PathVariable Long id) {
+    public ResponseEntity<?> deleteCategory(@PathVariable Long id){
         subcategoryService.delete(id);
-        return ResponseEntity.ok(new MessageResponse("Sub-categoria eliminada exitosamente"));
+        return ResponseEntity.ok(new MessageResponse("Subcategoria eliminada exitosamente"));
     }
-
 }

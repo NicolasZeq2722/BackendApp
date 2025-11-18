@@ -1,54 +1,55 @@
 package com.app.backend.dto;
 
-import com.app.backend.models.User;
+import com.app.backend.model.User;
 
-public class UserUpdateRequest {
+public class UserUpdateRequest{
     private String username;
-    private String email;
     private String password;
+    private String email;
     private User.Role role;
-    private Boolean isActive;
+    private Boolean active;
 
-    public UserUpdateRequest() {
+    public UserUpdateRequest(){    
     }
 
-    public String getUsername() {
+    public String getUsername(){
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(String username){
         this.username = username;
     }
 
-    public String getPassword() {
+    public String getPassword(){
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(String password){
         this.password = password;
     }
 
-    public String getEmail() {
+    public String getEmail(){
         return email;
-    }
+    } 
 
-    public void setEmail(String email) {
+    public void setEmail(String email){
         this.email = email;
     }
 
-    public User.Role getRole() {
+    public User.Role getRole(){
         return role;
     }
 
-    public void setRole(User.Role role) {
+    public void setRole(User.Role role){
         this.role = role;
     }
 
-    public Boolean getIsActive() {
-        return isActive;
+    public Boolean getActive(){
+        return active;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setActive(Boolean active){
+        this.active = active;
     }
+    
 }

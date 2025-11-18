@@ -3,12 +3,12 @@ package com.app.backend.model;
 import jakarta.persistence.*;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.list;
+
+import java.util.List;
 
 @Data
 @Entity
 @Table(name = "categories")
-
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,46 +25,44 @@ public class Category {
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     @JsonIgnore
-    private list<Subcategory> Subcategories;
+    private List<Subcategory> subcategories;
 
-    public Long getId(); {
+    public Long getId(){
         return id;
     }
 
-    public void setId(Long id); {
+    public void setId(){
         this.id = id;
     }
 
-    public String getNom(); {
+    public String getName(){
+        return name;
+    }
+
+    public void setName(String name){
         this.name = name;
     }
 
-    public void setNom(String name); {
-        this.name = name;
-    }
-
-    public String getDescription() {
+    public String getDescription(){
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(String description){
         this.description = description;
     }
 
-    public Boolean getActive() {
+    public Boolean getActive(){
         return active;
     }
-
-    public void setActive(Boolean active) {
+    public void setActive(Boolean active){
         this.active = active;
     }
 
-    public List<Subcategory> getSubcategories() {
+    public List<Subcategory> getSubcategories(){
         return subcategories;
     }
 
-    public void setSubcategories(List<Subcategory> subcategories) {
+    public void setSubcategories(List<Subcategory> subcategories){
         this.subcategories = subcategories;
-    }
+    }    
 }
-
