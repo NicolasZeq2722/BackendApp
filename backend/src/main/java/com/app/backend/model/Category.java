@@ -64,5 +64,5 @@ public class Category {
 
     public void setSubcategories(List<Subcategory> subcategories){
         this.subcategories = subcategories;
-    }    
+    }
 }
