@@ -1,7 +1,7 @@
 package com.app.backend.controller;
 
 import com.app.backend.model.Subcategory;
-import com.app.backend.service.SubCategoryService;
+import com.app.backend.service.SubcategoryService;
 import com.app.backend.dto.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -17,7 +17,7 @@ import javax.print.attribute.standard.Media;
 public class SubCategoryController {
     
     @Autowired
-    private SubCategoryService subcategoryService;
+    private SubcategoryService subcategoryService;
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'COORDINADOR')")
@@ -53,9 +53,9 @@ public class SubCategoryController {
         return ResponseEntity.ok(subcategoryService.update(id, subcategory));
     }
 
-    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}", produces = "application/json")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> deleteCategory(@PathVariable Long id){
+    public ResponseEntity<MessageResponse> deleteSubCategory(@PathVariable Long id){
         subcategoryService.delete(id);
         return ResponseEntity.ok(new MessageResponse("Subcategoria eliminada exitosamente"));
     }

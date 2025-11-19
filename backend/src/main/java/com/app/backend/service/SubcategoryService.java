@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class SubCategoryService {  
+public class SubcategoryService {  
 
     @Autowired
     private SubcategoryRepository subcategoryRepository;

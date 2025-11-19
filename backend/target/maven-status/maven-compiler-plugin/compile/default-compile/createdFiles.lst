@@ -14,11 +14,11 @@ com\app\backend\repository\UserRepository.class
 com\app\backend\model\Category.class
 com\app\backend\controller\CategoryController.class
 com\app\backend\dto\MessageResponse.class
-com\app\backend\service\SubCategoryService.class
 com\app\backend\repository\ProductRepository.class
 com\app\backend\security\JwtAuthenticationFilter.class
 com\app\backend\controller\StatsController.class
 com\app\backend\dto\UserCreateRequest.class
+com\app\backend\service\SubcategoryService.class
 com\app\backend\model\User$Role.class
 com\app\backend\security\JwtTokenProvider.class
 com\app\backend\controller\UserController.class
