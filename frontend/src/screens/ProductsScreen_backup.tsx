@@ -200,23 +200,23 @@ export default function ProductsScreen() {
           if (!item) return null;
           
           return (
-            <View style={styles.card}>
-              <View style={styles.cardContent}>
-                <Text style={styles.cardTitle}>{item?.name || 'Sin nombre'}</Text>
-                <Text style={styles.cardSubtitle}>{item?.description || 'Sin descripción'}</Text>
-                <Text style={styles.cardPrice}>Precio: ${item?.price || '0'}</Text>
-                <Text style={styles.cardStock}>Stock: {item?.stock || '0'}</Text>
-                <Text style={styles.cardCategory}>
+            <View style={productsStyles.card}>
+              <View style={productsStyles.cardContent}>
+                <Text style={productsStyles.cardTitle}>{item?.name || 'Sin nombre'}</Text>
+                <Text style={productsStyles.cardSubtitle}>{item?.description || 'Sin descripción'}</Text>
+                <Text style={productsStyles.cardPrice}>Precio: ${item?.price || '0'}</Text>
+                <Text style={productsStyles.cardStock}>Stock: {item?.stock || '0'}</Text>
+                <Text style={productsStyles.cardCategory}>
                   {item?.category?.name || 'Sin categoría'} / {item?.subcategory?.name || 'Sin subcategoría'}
                 </Text>
               </View>
-              <View style={styles.cardActions}>
+              <View style={productsStyles.cardActions}>
                 <TouchableOpacity onPress={() => openModal(item)}>
-                  <Text style={styles.editButton}>✏️</Text>
+                  <Text style={productsStyles.editButton}>✏️</Text>
                 </TouchableOpacity>
                 {currentUser?.role === 'ADMIN' && (
                   <TouchableOpacity onPress={() => handleDelete(item)}>
-                    <Text style={styles.deleteButton}>🗑️</Text>
+                    <Text style={productsStyles.deleteButton}>🗑️</Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -226,19 +226,19 @@ export default function ProductsScreen() {
       />
 
       <Modal visible={modalVisible} animationType="slide" transparent>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{editing ? 'Editar Producto' : 'Nuevo Producto'}</Text>
+        <View style={productsStyles.modalContainer}>
+          <View style={productsStyles.modalContent}>
+            <Text style={productsStyles.modalTitle}>{editing ? 'Editar Producto' : 'Nuevo Producto'}</Text>
             
             <TextInput
-              style={styles.input}
+              style={productsStyles.input}
               placeholder="Nombre"
               value={formData.name}
               onChangeText={(text) => setFormData({ ...formData, name: text })}
             />
             
             <TextInput
-              style={[styles.input, styles.textArea]}
+              style={[productsStyles.input, productsStyles.textArea]}
               placeholder="Descripción"
               value={formData.description}
               onChangeText={(text) => setFormData({ ...formData, description: text })}
@@ -247,7 +247,7 @@ export default function ProductsScreen() {
             />
 
             <TextInput
-              style={styles.input}
+              style={productsStyles.input}
               placeholder="Precio"
               value={formData.price}
               onChangeText={(text) => setFormData({ ...formData, price: text })}
@@ -255,19 +255,19 @@ export default function ProductsScreen() {
             />
 
             <TextInput
-              style={styles.input}
+              style={productsStyles.input}
               placeholder="Stock"
               value={formData.stock}
               onChangeText={(text) => setFormData({ ...formData, stock: text })}
               keyboardType="number-pad"
             />
 
-            <View style={styles.pickerContainer}>
-              <Text style={styles.label}>Categoría:</Text>
+            <View style={productsStyles.pickerContainer}>
+              <Text style={productsStyles.label}>Categoría:</Text>
               <Picker
                 selectedValue={formData.categoryId}
                 onValueChange={(value: string) => setFormData({ ...formData, categoryId: value, subcategoryId: '' })}
-                style={styles.picker}
+                style={productsStyles.picker}
               >
                 <Picker.Item label="Seleccione categoría" value="" />
                 {(categories || []).map((cat) => {
@@ -279,12 +279,12 @@ export default function ProductsScreen() {
               </Picker>
             </View>
 
-            <View style={styles.pickerContainer}>
-              <Text style={styles.label}>Subcategoría:</Text>
+            <View style={productsStyles.pickerContainer}>
+              <Text style={productsStyles.label}>Subcategoría:</Text>
               <Picker
                 selectedValue={formData.subcategoryId}
                 onValueChange={(value: string) => setFormData({ ...formData, subcategoryId: value })}
-                style={styles.picker}
+                style={productsStyles.picker}
                 enabled={(filteredSubcategories || []).length > 0}
               >
                 <Picker.Item label="Seleccione subcategoría" value="" />
@@ -297,12 +297,12 @@ export default function ProductsScreen() {
               </Picker>
             </View>
 
-            <View style={styles.modalActions}>
-              <TouchableOpacity style={styles.cancelButton} onPress={() => setModalVisible(false)}>
-                <Text style={styles.cancelButtonText}>Cancelar</Text>
+            <View style={productsStyles.modalActions}>
+              <TouchableOpacity style={productsStyles.cancelButton} onPress={() => setModalVisible(false)}>
+                <Text style={productsStyles.cancelButtonText}>Cancelar</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-                <Text style={styles.saveButtonText}>Guardar</Text>
+              <TouchableOpacity style={productsStyles.saveButton} onPress={handleSave}>
+                <Text style={productsStyles.saveButtonText}>Guardar</Text>
               </TouchableOpacity>
             </View>
           </View>
