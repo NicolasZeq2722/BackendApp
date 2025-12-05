@@ -126,7 +126,7 @@ export default function LoginScreen({ navigation }: any) {
           <Text style={loginStyles.credentialsTitle}>🔑 Credenciales de prueba</Text>
           <Text style={loginStyles.credentialsText}>
             Admin: admin / admin123{'\n'}
-            Coordinador: coordinador / coord123
+            Reclutador: reclutador / reclu123
           </Text>
         </View>
 

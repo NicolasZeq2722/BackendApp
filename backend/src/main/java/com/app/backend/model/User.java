@@ -35,7 +35,7 @@ public class User {
     private LocalDateTime created_at = LocalDateTime.now();
 
     public enum Role {
-        ADMIN, COORDINADOR
+        ADMIN, RECLUTADOR
     }
 
     public void setUsername(String username){

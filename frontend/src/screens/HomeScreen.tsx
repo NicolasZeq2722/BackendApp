@@ -61,7 +61,7 @@ export default function HomeScreen({ navigation }: any) {
           <Text style={homeStyles.userName}>{user?.username || 'Usuario'}</Text>
           <View style={homeStyles.userRole}>
             <Text style={homeStyles.userRoleText}>
-              {user?.role === 'ADMIN' ? '👑 Administrador' : '👤 Coordinador'}
+              {user?.role === 'ADMIN' ? '👑 Administrador' : '👨‍💼 Reclutador'}
             </Text>
           </View>
         </View>

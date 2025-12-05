@@ -43,7 +43,7 @@ public class UserService {
         if (request.getRole() != null) {
             user.setRole(request.getRole());
         } else {
-            user.setRole(User.Role.COORDINADOR); // Rol por defecto
+            user.setRole(User.Role.RECLUTADOR); // Rol por defecto
         }
 
         return userRepository.save(user);
@@ -53,7 +53,7 @@ public class UserService {
 
         User user = findById(id);
 
-        if (id == 1L && isCoordinador()) {
+        if (id == 1L && isReclutador()) {
             throw new RuntimeException("No tienes permiso de modificar el administrador principal");
         }
 
@@ -72,12 +72,12 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    private Boolean isCoordinador() {
+    private Boolean isReclutador() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getAuthorities() != null) {
             return auth.getAuthorities()
                     .stream()
-                    .anyMatch(a -> a.getAuthority().equals("ROLE_COORDINADOR"));
+                    .anyMatch(a -> a.getAuthority().equals("ROLE_RECLUTADOR"));
         }
         return false;
     }

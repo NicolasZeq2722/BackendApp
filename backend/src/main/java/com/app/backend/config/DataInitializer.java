@@ -33,11 +33,11 @@ public class DataInitializer implements CommandLineRunner {
             }
         }
 
-        if (userRepository.existsByUsername("coordinador")) {
-            User existingCoord = userRepository.findByUsername("coordinador").orElse(null);
-            if (existingCoord != null) {
-                userRepository.delete(existingCoord);
-                System.out.println("Usuario COORDINADOR existente eliminado");
+        if (userRepository.existsByUsername("reclutador")) {
+            User existingReclutador = userRepository.findByUsername("reclutador").orElse(null);
+            if (existingReclutador != null) {
+                userRepository.delete(existingReclutador);
+                System.out.println("Usuario RECLUTADOR existente eliminado");
             }
         }
 
@@ -51,15 +51,15 @@ public class DataInitializer implements CommandLineRunner {
         userRepository.save(admin);
         System.out.println("Usuario ADMIN creado - username: admin, password: admin123");
 
-        // Crear usuario COORDINADOR
-        User coord = new User();
-        coord.setUsername("coordinador");
-        coord.setPassword(passwordEncoder.encode("coord123"));
-        coord.setEmail("coordinador@app.com");
-        coord.setRole(User.Role.COORDINADOR);
-        coord.setActive(true);
-        userRepository.save(coord);
-        System.out.println("Usuario COORDINADOR creado - username: coordinador, password: coord123");
+        // Crear usuario RECLUTADOR
+        User reclutador = new User();
+        reclutador.setUsername("reclutador");
+        reclutador.setPassword(passwordEncoder.encode("reclu123"));
+        reclutador.setEmail("reclutador@app.com");
+        reclutador.setRole(User.Role.RECLUTADOR);
+        reclutador.setActive(true);
+        userRepository.save(reclutador);
+        System.out.println("Usuario RECLUTADOR creado - username: reclutador, password: reclu123");
 
         System.out.println("DataInitializer completado exitosamente.");
     }
