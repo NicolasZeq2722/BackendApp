@@ -4,6 +4,7 @@ import com.app.backend.dto.UserCreateRequest;
 import com.app.backend.dto.UserUpdateRequest;
 import com.app.backend.model.User;
 import com.app.backend.repository.UserRepository;
+import com.app.backend.repository.NotificacionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +18,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private NotificacionRepository notificacionRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -90,6 +94,11 @@ public class UserService {
             throw new RuntimeException("No se puede eliminar el administrador principal");
         }
 
+        // ✅ Primero, eliminar todas las notificaciones asociadas al usuario
+        // para evitar violación de clave foránea (FOREIGN KEY CONSTRAINT)
+        notificacionRepository.deleteAllByUsuarioId(id);
+        
+        // Luego, eliminar el usuario
         userRepository.delete(user);
     }
 }

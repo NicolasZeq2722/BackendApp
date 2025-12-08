@@ -1,7 +1,7 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const API_URL = "http://172.16.100.213:8080/api"; // IP local obtenida de ipconfig
+const API_URL = "http://192.168.1.11:8080/api"; // IP local actual
 
 const api = axios.create({
   baseURL: API_URL,
@@ -24,6 +24,7 @@ api.interceptors.request.use(
   }
 );
 
+// ======================== AUTH SERVICE ========================
 export const authService = {
   login: async (username: string, password: string) => {
     const response = await api.post("/auth/login", { username, password });
@@ -31,6 +32,11 @@ export const authService = {
       await AsyncStorage.setItem("token", response.data.token);
       await AsyncStorage.setItem("user", JSON.stringify(response.data));
     }
+    return response.data;
+  },
+
+  register: async (data: any) => {
+    const response = await api.post("/auth/register", data);
     return response.data;
   },
 
@@ -45,77 +51,72 @@ export const authService = {
   },
 };
 
-export const citacionService = {
-  getAll: () => api.get("/citacion"),
-  getById: (id: number) => api.get(`/citacion/${id}`),
-  create: (data: any) => api.post("/citacion", data),
-  createMultiple: (data: any) => api.post("/citacion/multiples", data),
-  updateEstado: (id: number, estado: string) =>
-    api.put(`/citacion/${id}/estado`, { estado }),
-  sendEmail: (id: number) => api.post(`/citacion/${id}/enviar-whatsapp`),
-};
-
-export const postulacionService = {
-  getAll: () => api.get("/postulacion"),
-  create: (data: any) => api.post("/postulacion", data),
-};
-
+// ======================== OFERTA SERVICE ========================
 export const ofertaService = {
   getAll: () => api.get("/oferta"),
-  create: (data: any) => api.post("/oferta", data),
-  update: (id: number, data: any) => api.put(`/oferta/${id}`, data),
-  delete: (id: number) => api.delete(`/oferta/${id}`),
+  getById: (id: number) => api.get(`/oferta/${id}`),
+  getByReclutador: (reclutadorId: number) => api.get(`/oferta/reclutador/${reclutadorId}`),
+  search: (titulo: string) => api.get(`/oferta/buscar/titulo?titulo=${titulo}`),
+  searchByUbicacion: (ubicacion: string) => api.get(`/oferta/buscar/ubicacion?ubicacion=${ubicacion}`),
+  create: (data: any, reclutadorId: number) => 
+    api.post(`/oferta?reclutadorId=${reclutadorId}`, data),
+  update: (id: number, data: any, reclutadorId: number) => 
+    api.put(`/oferta/${id}?reclutadorId=${reclutadorId}`, data),
+  delete: (id: number, reclutadorId: number) => 
+    api.delete(`/oferta/${id}?reclutadorId=${reclutadorId}`),
 };
 
+// ======================== POSTULACION SERVICE ========================
+export const postulacionService = {
+  getAll: () => api.get("/postulacion"),
+  getById: (id: number) => api.get(`/postulacion/${id}`),
+  getByOferta: (ofertaId: number) => api.get(`/postulacion/oferta/${ofertaId}`),
+  getByAspirante: (aspiranteId: number) => api.get(`/postulacion/aspirante/${aspiranteId}`),
+  getByReclutador: (reclutadorId: number) => api.get(`/postulacion/reclutador/${reclutadorId}`),
+  postularse: (ofertaId: number, aspiranteId: number) => 
+    api.post(`/postulacion?ofertaId=${ofertaId}&aspiranteId=${aspiranteId}`),
+  cambiarEstado: (id: number, estado: string, reclutadorId: number) =>
+    api.put(`/postulacion/${id}/estado?estado=${estado}&reclutadorId=${reclutadorId}`),
+  eliminar: (id: number, aspiranteId: number) =>
+    api.delete(`/postulacion/${id}?aspiranteId=${aspiranteId}`),
+};
+
+// ======================== CITACION SERVICE ========================
+export const citacionService = {
+  getAll: () => api.get("/citacion"),
+  getById: (id: number, usuarioId: number) => api.get(`/citacion/${id}?usuarioId=${usuarioId}`),
+  getByReclutador: (reclutadorId: number) => api.get(`/citacion/reclutador/${reclutadorId}`),
+  getByAspirante: (aspiranteId: number) => api.get(`/citacion/aspirante/${aspiranteId}`),
+  create: (data: any, reclutadorId: number) => 
+    api.post(`/citacion?reclutadorId=${reclutadorId}`, data),
+  update: (id: number, data: any, reclutadorId: number) =>
+    api.put(`/citacion/${id}?reclutadorId=${reclutadorId}`, data),
+  cambiarEstado: (id: number, estado: string, reclutadorId: number) =>
+    api.put(`/citacion/${id}/estado?estado=${estado}&reclutadorId=${reclutadorId}`),
+  delete: (id: number, reclutadorId: number) =>
+    api.delete(`/citacion/${id}?reclutadorId=${reclutadorId}`),
+  eliminar: (id: number, reclutadorId: number) =>
+    api.delete(`/citacion/${id}?reclutadorId=${reclutadorId}`),
+};
+
+// ======================== NOTIFICACION SERVICE ========================
+export const notificacionService = {
+  getByUsuario: (usuarioId: number) => api.get(`/notificacion/usuario/${usuarioId}`),
+  getNoLeidas: (usuarioId: number) => api.get(`/notificacion/usuario/${usuarioId}/no-leidas`),
+  contarNoLeidas: (usuarioId: number) => api.get(`/notificacion/usuario/${usuarioId}/contar`),
+  marcarComoLeida: (id: number) => api.put(`/notificacion/${id}/leida`),
+  marcarTodasComoLeida: (usuarioId: number) => api.put(`/notificacion/usuario/${usuarioId}/todas-leidas`),
+  eliminar: (id: number) => api.delete(`/notificacion/${id}`),
+};
+
+// ======================== USUARIO SERVICE ========================
 export const usuarioService = {
   getAll: () => api.get("/users"),
-  create: (data: any) => api.post("/users", data),
-  update: (id: number, data: any) => api.put(`/users/${id}`, data),
-  delete: (id: number) => api.delete(`/users/${id}`),
-};
-
-export const notificacionService = {
-  getAll: () => api.get("/notificacion"),
-};
-
-export const categoryService = {
-  getAll: () => api.get("/categories"),
-  getById: (id: number) => api.get(`/categories/${id}`),
-  create: (data: any) => api.post("/categories", data),
-  update: (id: number, data: any) => api.put(`/categories/${id}`, data),
-  delete: (id: number) => api.delete(`/categories/${id}`),
-};
-
-export const subcategoryService = {
-  getAll: () => api.get("/subcategories"),
-  getByCategory: (categoryId: number) =>
-    api.get(`/subcategories/category/${categoryId}`),
-  getById: (id: number) => api.get(`/subcategories/${id}`),
-  create: (data: any) => api.post("/subcategories", data),
-  update: (id: number, data: any) => api.put(`/subcategories/${id}`, data),
-  delete: (id: number) => api.delete(`/subcategories/${id}`),
-};
-
-export const productService = {
-  getAll: () => api.get("/products"),
-  getByCategory: (categoryId: number) =>
-    api.get(`/products/category/${categoryId}`),
-  getBySubcategory: (subcategoryId: number) =>
-    api.get(`/products/subcategory/${subcategoryId}`),
-  getById: (id: number) => api.get(`/products/${id}`),
-  create: (data: any) => api.post("/products", data),
-  update: (id: number, data: any) => api.put(`/products/${id}`, data),
-  delete: (id: number) => api.delete(`/products/${id}`),
-};
-
-export const userService = {
-  getAll: () => api.get("/users"),
   getById: (id: number) => api.get(`/users/${id}`),
+  getByRole: (role: string) => api.get(`/users/role/${role}`),  // ✅ NUEVO
   create: (data: any) => api.post("/users", data),
   update: (id: number, data: any) => api.put(`/users/${id}`, data),
   delete: (id: number) => api.delete(`/users/${id}`),
 };
 
-export const statsService = {
-  getStats: () => api.get("/stats"),
-};
+export default api;

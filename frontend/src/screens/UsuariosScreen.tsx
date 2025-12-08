@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -16,13 +16,13 @@ import { usuarioService, authService } from "../services/api";
 import { usersStyles } from "../styles/UsuariosStyles";
 import { Colors } from "../styles/GlobalStyles";
 
-export default function UsersScreen() {
+export default function UsersScreen({ navigation }: any) {
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [editingUser, setEditingUser] = useState<any>(null);
   const [currentUser, setCurrentUser] = useState<any>(null);
-  const [error, setError] = useState("");
+  const [error, setError] = useState("");  
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     username: "",
@@ -99,7 +99,7 @@ export default function UsersScreen() {
     }
 
     if (!editingUser && !formData.password) {
-      Alert.alert("Error", "La contraseña es requerida para nuevos usuarios");
+      Alert.alert("Error", "La contrase�a es requerida para nuevos usuarios");
       return;
     }
 
@@ -110,10 +110,10 @@ export default function UsersScreen() {
           delete updateData.password;
         }
         await usuarioService.update(editingUser.id, updateData);
-        Alert.alert("Éxito", "Usuario actualizado correctamente");
+        Alert.alert("�xito", "Usuario actualizado correctamente");
       } else {
         await usuarioService.create(formData);
-        Alert.alert("Éxito", "Usuario creado correctamente");
+        Alert.alert("�xito", "Usuario creado correctamente");
       }
       closeModal();
       loadUsers();
@@ -127,8 +127,8 @@ export default function UsersScreen() {
 
   const handleDelete = (userId: number) => {
     Alert.alert(
-      "Confirmar eliminación",
-      "¿Está seguro que desea eliminar este usuario?",
+      "Confirmar eliminaci�n",
+      "�Est� seguro que desea eliminar este usuario?",
       [
         { text: "Cancelar", style: "cancel" },
         {
@@ -137,7 +137,7 @@ export default function UsersScreen() {
           onPress: async () => {
             try {
               await usuarioService.delete(userId);
-              Alert.alert("Éxito", "Usuario eliminado correctamente");
+              Alert.alert("�xito", "Usuario eliminado correctamente");
               loadUsers();
             } catch (error: any) {
               Alert.alert(
@@ -156,7 +156,7 @@ export default function UsersScreen() {
       <View style={usersStyles.container}>
         <View style={usersStyles.header}>
           <View style={usersStyles.headerContent}>
-            <Text style={usersStyles.headerTitle}>👥 Usuarios</Text>
+            <Text style={usersStyles.headerTitle}>?? Usuarios</Text>
           </View>
         </View>
         <View style={usersStyles.loadingContainer}>
@@ -172,11 +172,11 @@ export default function UsersScreen() {
       <View style={usersStyles.container}>
         <View style={usersStyles.header}>
           <View style={usersStyles.headerContent}>
-            <Text style={usersStyles.headerTitle}>👥 Usuarios</Text>
+            <Text style={usersStyles.headerTitle}>?? Usuarios</Text>
           </View>
         </View>
         <View style={usersStyles.errorContainer}>
-          <Text style={usersStyles.errorIcon}>⚠️</Text>
+          <Text style={usersStyles.errorIcon}>??</Text>
           <Text style={usersStyles.errorText}>{error}</Text>
           <TouchableOpacity style={usersStyles.retryButton} onPress={loadUsers}>
             <Text style={usersStyles.retryButtonText}>Reintentar</Text>
@@ -190,7 +190,7 @@ export default function UsersScreen() {
     <View style={usersStyles.container}>
       <View style={usersStyles.header}>
         <View style={usersStyles.headerContent}>
-          <Text style={usersStyles.headerTitle}>👥 Usuarios</Text>
+          <Text style={usersStyles.headerTitle}>?? Usuarios</Text>
 
           {currentUser?.role === "ADMIN" && (
             <TouchableOpacity
@@ -198,7 +198,7 @@ export default function UsersScreen() {
               onPress={openCreateModal}
               activeOpacity={0.7}
             >
-              <Text style={usersStyles.addButtonIcon}>➕</Text>
+              <Text style={usersStyles.addButtonIcon}>?</Text>
               <Text style={usersStyles.addButtonText}>Nuevo</Text>
             </TouchableOpacity>
           )}
@@ -207,11 +207,11 @@ export default function UsersScreen() {
 
       {users.length === 0 ? (
         <View style={usersStyles.emptyContainer}>
-          <Text style={usersStyles.emptyIcon}>👥</Text>
+          <Text style={usersStyles.emptyIcon}>??</Text>
           <Text style={usersStyles.emptyText}>No hay usuarios registrados</Text>
           <Text style={usersStyles.emptySubtext}>
             {currentUser?.role === "ADMIN"
-              ? 'Presiona el botón "Nuevo" para agregar el primer usuario'
+              ? 'Presiona el bot�n "Nuevo" para agregar el primer usuario'
               : "No tienes permisos para crear usuarios"}
           </Text>
         </View>
@@ -223,8 +223,8 @@ export default function UsersScreen() {
             <View style={usersStyles.userCard}>
               <View style={usersStyles.userCardHeader}>
                 <View style={usersStyles.userInfo}>
-                  <Text style={usersStyles.userName}>👤 {item.username}</Text>
-                  <Text style={usersStyles.userEmail}>📧 {item.email}</Text>
+                  <Text style={usersStyles.userName}>?? {item.username}</Text>
+                  <Text style={usersStyles.userEmail}>?? {item.email}</Text>
 
                   <View style={usersStyles.userMeta}>
                     <View
@@ -234,7 +234,7 @@ export default function UsersScreen() {
                       ]}
                     >
                       <Text style={usersStyles.roleBadgeText}>
-                        {item.role === "ADMIN" ? "👑 Admin" : "👨‍💼 Reclutador"}
+                        {item.role === "ADMIN" ? "?? Admin" : "????? Reclutador"}
                       </Text>
                     </View>
 
@@ -247,7 +247,7 @@ export default function UsersScreen() {
                       ]}
                     >
                       <Text style={usersStyles.statusBadgeText}>
-                        {item.active ? "✅ Activo" : "❌ Inactivo"}
+                        {item.active ? "? Activo" : "? Inactivo"}
                       </Text>
                     </View>
                   </View>
@@ -261,7 +261,7 @@ export default function UsersScreen() {
                     onPress={() => openEditModal(item)}
                     activeOpacity={0.7}
                   >
-                    <Text style={usersStyles.actionButtonIcon}>✏️</Text>
+                    <Text style={usersStyles.actionButtonIcon}>??</Text>
                     <Text style={usersStyles.actionButtonText}>Editar</Text>
                   </TouchableOpacity>
 
@@ -270,7 +270,7 @@ export default function UsersScreen() {
                     onPress={() => handleDelete(item.id)}
                     activeOpacity={0.7}
                   >
-                    <Text style={usersStyles.actionButtonIcon}>🗑️</Text>
+                    <Text style={usersStyles.actionButtonIcon}>???</Text>
                     <Text style={usersStyles.actionButtonText}>Eliminar</Text>
                   </TouchableOpacity>
                 </View>
@@ -292,19 +292,19 @@ export default function UsersScreen() {
           <View style={usersStyles.modalContent}>
             <View style={usersStyles.modalHeader}>
               <Text style={usersStyles.modalTitle}>
-                {editingUser ? "✏️ Editar Usuario" : "➕ Nuevo Usuario"}
+                {editingUser ? "?? Editar Usuario" : "? Nuevo Usuario"}
               </Text>
               <TouchableOpacity
                 style={usersStyles.closeButton}
                 onPress={closeModal}
               >
-                <Text style={usersStyles.closeButtonText}>✕</Text>
+                <Text style={usersStyles.closeButtonText}>?</Text>
               </TouchableOpacity>
             </View>
 
             <ScrollView style={usersStyles.formContainer}>
               <View style={usersStyles.inputGroup}>
-                <Text style={usersStyles.inputLabel}>👤 Usuario *</Text>
+                <Text style={usersStyles.inputLabel}>?? Usuario *</Text>
                 <TextInput
                   style={[
                     usersStyles.input,
@@ -322,7 +322,7 @@ export default function UsersScreen() {
               </View>
 
               <View style={usersStyles.inputGroup}>
-                <Text style={usersStyles.inputLabel}>📧 Email *</Text>
+                <Text style={usersStyles.inputLabel}>?? Email *</Text>
                 <TextInput
                   style={[
                     usersStyles.input,
@@ -342,7 +342,7 @@ export default function UsersScreen() {
 
               <View style={usersStyles.inputGroup}>
                 <Text style={usersStyles.inputLabel}>
-                  🔒 Contraseña {!editingUser && "*"}
+                  ?? Contrase�a {!editingUser && "*"}
                 </Text>
                 <TextInput
                   style={[
@@ -351,8 +351,8 @@ export default function UsersScreen() {
                   ]}
                   placeholder={
                     editingUser
-                      ? "Dejar vacío para mantener actual"
-                      : "Contraseña"
+                      ? "Dejar vac�o para mantener actual"
+                      : "Contrase�a"
                   }
                   value={formData.password}
                   onChangeText={(text) =>
@@ -365,7 +365,7 @@ export default function UsersScreen() {
               </View>
 
               <View style={usersStyles.inputGroup}>
-                <Text style={usersStyles.inputLabel}>👑 Rol</Text>
+                <Text style={usersStyles.inputLabel}>?? Rol</Text>
                 <View style={usersStyles.pickerContainer}>
                   <Picker
                     selectedValue={formData.role}
@@ -374,15 +374,15 @@ export default function UsersScreen() {
                     }
                     style={usersStyles.picker}
                   >
-                    <Picker.Item label="👨‍💼 Reclutador" value="RECLUTADOR" />
-                    <Picker.Item label="👑 Administrador" value="ADMIN" />
+                    <Picker.Item label="????? Reclutador" value="RECLUTADOR" />
+                    <Picker.Item label="?? Administrador" value="ADMIN" />
                   </Picker>
                 </View>
               </View>
 
               <View style={usersStyles.inputGroup}>
                 <View style={usersStyles.switchContainer}>
-                  <Text style={usersStyles.switchLabel}>✅ Usuario activo</Text>
+                  <Text style={usersStyles.switchLabel}>? Usuario activo</Text>
                   <Switch
                     value={formData.active}
                     onValueChange={(value) =>

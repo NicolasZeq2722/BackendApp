@@ -49,6 +49,12 @@
             <artifactId>mysql-connector-j</artifactId>
         </dependency>
 
+        <!-- Mail -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
         <!-- JJWT 0.11.5 - Versión compatible -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -106,6 +112,13 @@
                 <configuration>
                     <source>17</source>
                     <target>17</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.40</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
 

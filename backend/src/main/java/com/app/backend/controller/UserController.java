@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
@@ -34,6 +35,22 @@ public class UserController {
     @PreAuthorize("hasAnyRole('ADMIN', 'COORDINADOR')")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.findById(id));
+    }
+
+    // ✅ NUEVO: Endpoint para filtrar usuarios por rol
+    // Accesible para RECLUTADOR y ADMIN
+    @GetMapping("/role/{roleName}")
+    @PreAuthorize("hasAnyRole('RECLUTADOR', 'ADMIN')")
+    public ResponseEntity<List<User>> getUsersByRole(@PathVariable String roleName) {
+        try {
+            // Filtrar usuarios por rol (case-insensitive)
+            List<User> users = userService.findAll().stream()
+                    .filter(u -> u.getRole().name().equalsIgnoreCase(roleName))
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(users);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     // POST: Registro público (QUITAMOS seguridad)

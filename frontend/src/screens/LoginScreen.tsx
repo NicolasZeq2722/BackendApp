@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, ScrollView, ActivityIndicator } from 'react-native';
-import { authService } from '../services/api';
+import { AuthContext } from '../context/AuthContext';
 import { loginStyles } from '../styles/LoginStyles';
 import { Colors } from '../styles/GlobalStyles';
 
-export default function LoginScreen({ navigation }: any) {
+export default function LoginScreen() {
+  const { login } = useContext(AuthContext);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,10 +21,20 @@ export default function LoginScreen({ navigation }: any) {
     setLoading(true);
     setError('');
     try {
-      const response = await authService.login(username, password);
-      navigation.replace('Home');
+      // ✅ Sanitizar inputs eliminando espacios en blanco
+      const trimmedUsername = username.trim();
+      const trimmedPassword = password.trim();
+      console.log('🔐 Intentando login con usuario:', trimmedUsername);
+      const result = await login(trimmedUsername, trimmedPassword);
+      if (result.success) {
+        console.log('Login exitoso');
+        // AuthContext manejará la navegación automáticamente
+      } else {
+        setError(result.error || 'Credenciales inválidas');
+      }
     } catch (error: any) {
-      setError(error.response?.data?.message || 'Credenciales inválidas');
+      console.log('Login error:', error);
+      setError('Error al conectar con el servidor');
     } finally {
       setLoading(false);
     }
@@ -38,10 +49,10 @@ export default function LoginScreen({ navigation }: any) {
         {/* Header con logo y título */}
         <View style={loginStyles.headerContainer}>
           <View style={loginStyles.logoContainer}>
-            <Text style={loginStyles.logoIcon}>🏢</Text>
+            <Text style={loginStyles.logoIcon}>💼</Text>
           </View>
-          <Text style={loginStyles.appTitle}>Sistema de Gestión</Text>
-          <Text style={loginStyles.appSubtitle}>Administración empresarial</Text>
+          <Text style={loginStyles.appTitle}>Workable</Text>
+          <Text style={loginStyles.appSubtitle}>Sistema de Empleo</Text>
         </View>
 
         {/* Formulario de login */}
@@ -126,15 +137,16 @@ export default function LoginScreen({ navigation }: any) {
           <Text style={loginStyles.credentialsTitle}>🔑 Credenciales de prueba</Text>
           <Text style={loginStyles.credentialsText}>
             Admin: admin / admin123{'\n'}
-            Reclutador: reclutador / reclu123
+            Reclutador: reclutador / reclu123{'\n'}
+            Aspirante: aspirante / aspi123
           </Text>
         </View>
 
         {/* Footer */}
         <View style={loginStyles.footerContainer}>
           <Text style={loginStyles.footerText}>
-            © 2025 Sistema de Gestión{'\n'}
-            Versión 1.0.0
+            © 2025 Workable{'\n'}
+            Versión 1.0.0 - Sistema de Empleo
           </Text>
         </View>
       </ScrollView>

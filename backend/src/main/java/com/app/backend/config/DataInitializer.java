@@ -1,9 +1,7 @@
 package com.app.backend.config;
 
 import com.app.backend.model.User;
-import com.app.backend.model.Category;
 import com.app.backend.repository.UserRepository;
-import com.app.backend.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,9 +11,6 @@ import org.springframework.stereotype.Component;
 public class DataInitializer implements CommandLineRunner {
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -41,27 +36,45 @@ public class DataInitializer implements CommandLineRunner {
             }
         }
 
+        if (userRepository.existsByUsername("aspirante")) {
+            User existingAspirante = userRepository.findByUsername("aspirante").orElse(null);
+            if (existingAspirante != null) {
+                userRepository.delete(existingAspirante);
+                System.out.println("Usuario ASPIRANTE existente eliminado");
+            }
+        }
+
         // Crear usuario ADMIN
         User admin = new User();
         admin.setUsername("admin");
         admin.setPassword(passwordEncoder.encode("admin123"));
-        admin.setEmail("admin@app.com");
+        admin.setEmail("admin@workable.com");
         admin.setRole(User.Role.ADMIN);
         admin.setActive(true);
         userRepository.save(admin);
-        System.out.println("Usuario ADMIN creado - username: admin, password: admin123");
+        System.out.println("✓ Usuario ADMIN creado - username: admin, password: admin123");
 
         // Crear usuario RECLUTADOR
         User reclutador = new User();
         reclutador.setUsername("reclutador");
         reclutador.setPassword(passwordEncoder.encode("reclu123"));
-        reclutador.setEmail("reclutador@app.com");
+        reclutador.setEmail("reclutador@workable.com");
         reclutador.setRole(User.Role.RECLUTADOR);
         reclutador.setActive(true);
         userRepository.save(reclutador);
-        System.out.println("Usuario RECLUTADOR creado - username: reclutador, password: reclu123");
+        System.out.println("✓ Usuario RECLUTADOR creado - username: reclutador, password: reclu123");
 
-        System.out.println("DataInitializer completado exitosamente.");
+        // Crear usuario ASPIRANTE
+        User aspirante = new User();
+        aspirante.setUsername("aspirante");
+        aspirante.setPassword(passwordEncoder.encode("aspi123"));
+        aspirante.setEmail("aspirante@workable.com");
+        aspirante.setRole(User.Role.ASPIRANTE);
+        aspirante.setActive(true);
+        userRepository.save(aspirante);
+        System.out.println("✓ Usuario ASPIRANTE creado - username: aspirante, password: aspi123");
+
+        System.out.println("✓ DataInitializer completado exitosamente.");
     }
 
     

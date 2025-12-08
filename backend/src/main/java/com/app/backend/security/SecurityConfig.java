@@ -53,11 +53,46 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+                // Rutas públicas
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("GET", "/api/oferta").permitAll()
+                .requestMatchers("GET", "/api/oferta/**").permitAll()
+                .requestMatchers("GET", "/api/oferta/buscar/**").permitAll()
+                
+                // ✅ NUEVO: Permitir que Reclutadores y Admin vean usuarios por rol
+                .requestMatchers("GET", "/api/users/role/**").hasAnyRole("RECLUTADOR", "ADMIN")
+                
+                // Rutas protegidas - Ofertas
+                .requestMatchers("POST", "/api/oferta").hasAnyRole("RECLUTADOR", "ADMIN")
+                .requestMatchers("PUT", "/api/oferta/**").hasAnyRole("RECLUTADOR", "ADMIN")
+                .requestMatchers("DELETE", "/api/oferta/**").hasAnyRole("RECLUTADOR", "ADMIN")
+                
+                // Rutas protegidas - Postulaciones
+                .requestMatchers("POST", "/api/postulacion").hasRole("ASPIRANTE")
+                .requestMatchers("GET", "/api/postulacion/**").hasAnyRole("ASPIRANTE", "RECLUTADOR", "ADMIN")
+                .requestMatchers("PUT", "/api/postulacion/**").hasAnyRole("RECLUTADOR", "ADMIN")
+                .requestMatchers("DELETE", "/api/postulacion/**").hasRole("ASPIRANTE")
+                
+                // Rutas protegidas - Citaciones
+                .requestMatchers("/api/citacion/**").hasAnyRole("ASPIRANTE", "RECLUTADOR", "ADMIN")
+                
+                // Rutas protegidas - Notificaciones
+                .requestMatchers("/api/notificacion/**").hasAnyRole("ASPIRANTE", "RECLUTADOR", "ADMIN")
+                
+                // Rutas protegidas - Usuarios (CRUD Admin)
+                .requestMatchers("GET", "/api/users").hasAnyRole("ADMIN")
+                .requestMatchers("POST", "/api/users").hasAnyRole("ADMIN")
+                .requestMatchers("PUT", "/api/users/**").hasAnyRole("ADMIN", "ASPIRANTE", "RECLUTADOR")
+                .requestMatchers("DELETE", "/api/users/**").hasAnyRole("ADMIN")
+                
+                // H2 Console (para desarrollo)
+                .requestMatchers("/h2-console/**").permitAll()
+                
                 .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())); // Para H2 console
         return http.build();
     }
 

@@ -34,8 +34,14 @@ public class User {
     @Column(name = "created_at")
     private LocalDateTime created_at = LocalDateTime.now();
 
+    @Column(name = "numero_telefono")
+    private String numeroTelefono;
+
+    @Column(columnDefinition = "TEXT")
+    private String resumen;
+
     public enum Role {
-        ADMIN, RECLUTADOR
+        ADMIN, RECLUTADOR, ASPIRANTE, ADSO
     }
 
     public void setUsername(String username){
