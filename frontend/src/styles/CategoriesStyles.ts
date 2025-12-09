@@ -1,19 +1,35 @@
 import { StyleSheet } from 'react-native';
-import { Colors, Typography, Spacing, Border, Shadows } from './GlobalStyles';
+import {
+  COLORS,
+  FONTS,
+  SPACING,
+  SIZES,
+  SHADOW_STYLES,
+  Border,
+} from './GlobalStyles';
+
+/**
+ * 📂 CATEGORIES SCREEN STYLES
+ * Estilos refactorizados con Design Tokens profesionales
+ */
 
 export const categoriesStyles = StyleSheet.create({
+  // ===== CONTENEDOR =====
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: COLORS.background,
   },
 
+  // ===== HEADER =====
   header: {
-    backgroundColor: Colors.white,
-    paddingTop: Spacing.lg,
-    paddingBottom: Spacing.md,
-    paddingHorizontal: Spacing.lg,
-    ...Shadows.medium,
+    backgroundColor: COLORS.surface,
+    paddingTop: SPACING.lg,
+    paddingBottom: SPACING.md,
+    paddingHorizontal: SPACING.lg,
+    ...SHADOW_STYLES.card,
     zIndex: 1,
+    borderBottomWidth: Border.width.thin,
+    borderBottomColor: COLORS.cardBorder,
   },
 
   headerContent: {
@@ -23,47 +39,59 @@ export const categoriesStyles = StyleSheet.create({
   },
 
   headerTitle: {
-    fontSize: Typography.fontSize.xl,
-    fontWeight: Typography.fontWeight.bold,
-    color: Colors.black,
+    fontSize: FONTS.sizes.h2,
+    fontWeight: FONTS.weights.bold,
+    color: COLORS.textPrimary,
   },
 
+  // ===== BOTÓN AGREGAR =====
   addButton: {
-    backgroundColor: Colors.primary,
+    backgroundColor: COLORS.success,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-    borderRadius: Border.radius.md,
-    ...Shadows.small,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm,
+    borderRadius: SIZES.radiusBtn,
+    ...SHADOW_STYLES.small,
   },
 
   addButtonIcon: {
-    fontSize: 16,
-    marginRight: Spacing.xs,
+    fontSize: FONTS.sizes.body,
+    color: COLORS.textWhite,
+    marginRight: SPACING.xs,
   },
 
   addButtonText: {
-    color: Colors.white,
-    fontSize: Typography.fontSize.sm,
-    fontWeight: Typography.fontWeight.semibold,
+    color: COLORS.textWhite,
+    fontSize: FONTS.sizes.small,
+    fontWeight: FONTS.weights.semibold,
   },
 
+  // ===== LISTA DE CATEGORÍAS =====
   listContainer: {
-    padding: Spacing.md,
-    paddingBottom: Spacing.xl,
+    padding: SPACING.md,
+    paddingBottom: SPACING.xl,
   },
 
+  // ===== TARJETA DE CATEGORÍA =====
   categoryCard: {
-    backgroundColor: Colors.white,
-    borderRadius: Border.radius.lg,
-    marginBottom: Spacing.md,
-    padding: Spacing.lg,
-    ...Shadows.medium,
+    backgroundColor: COLORS.surface,
+    borderRadius: SIZES.radiusCard,
+    marginBottom: SPACING.md,
+    padding: SPACING.lg,
+    borderWidth: 1,
+    borderColor: COLORS.cardBorder,
+    ...SHADOW_STYLES.card,
+  },
+
+  categoryCardHighlight: {
+    borderColor: COLORS.primary,
+    borderWidth: 2,
+    backgroundColor: COLORS.primaryVery,
   },
 
   categoryCardHeader: {
-    marginBottom: Spacing.md,
+    marginBottom: SPACING.md,
   },
 
   categoryInfo: {
@@ -71,13 +99,23 @@ export const categoriesStyles = StyleSheet.create({
   },
 
   categoryName: {
-    fontSize: Typography.fontSize.lg,
-    fontWeight: Typography.fontWeight.bold,
-    color: Colors.black,
-    marginBottom: Spacing.xs,
+    fontSize: FONTS.sizes.h3,
+    fontWeight: FONTS.weights.bold,
+    color: COLORS.textPrimary,
+    marginBottom: SPACING.xs,
   },
 
   categoryDescription: {
+    fontSize: FONTS.sizes.small,
+    color: COLORS.textSecondary,
+    marginBottom: SPACING.xs,
+  },
+
+  categoryMeta: {
+    fontSize: FONTS.sizes.tiny,
+    color: COLORS.textLight,
+    fontWeight: FONTS.weights.regular,
+  },
     fontSize: Typography.fontSize.sm,
     color: Colors.gray[600],
     lineHeight: 20,

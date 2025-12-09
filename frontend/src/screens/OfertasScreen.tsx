@@ -78,8 +78,25 @@ const OfertasScreen = ({ navigation }: any) => {
       );
 
       if (response.data && Array.isArray(response.data)) {
-        setOfertas(response.data);
-        console.log("✅ Ofertas cargadas exitosamente:", response.data.length);
+        let ofertasToShow = response.data;
+
+        // 🔐 FILTRO POR ROL: Si es RECLUTADOR, mostrar solo sus propias ofertas
+        if (user?.role === "RECLUTADOR" && user?.id) {
+          console.log("🔍 Filtrando ofertas para RECLUTADOR ID:", user.id);
+          ofertasToShow = response.data.filter(
+            (oferta: any) => oferta.reclutador?.id === user.id || oferta.reclutadorId === user.id
+          );
+          console.log(
+            "✅ Ofertas filtradas para reclutador:",
+            ofertasToShow.length,
+            "de",
+            response.data.length
+          );
+        }
+        // Si es ADMIN o ASPIRANTE, mostrar todas
+
+        setOfertas(ofertasToShow);
+        console.log("✅ Ofertas cargadas exitosamente:", ofertasToShow.length);
       } else {
         console.warn("⚠️ Respuesta inesperada:", response.data);
         setOfertas([]);
@@ -228,11 +245,21 @@ const OfertasScreen = ({ navigation }: any) => {
                               try {
                                 console.log("🗑️ Eliminando oferta ID:", item.id, "por usuario:", user?.username);
                                 await ofertaService.delete(item.id, user.id);
+                                
+                                // ✅ OPTIMIZACIÓN: Actualizar estado inmediatamente (sin esperar reload)
+                                // Esto elimina la oferta de la UI al instante
+                                setOfertas((prevOfertas) =>
+                                  prevOfertas.filter((oferta) => oferta.id !== item.id)
+                                );
+                                setFilteredOfertas((prevFiltered) =>
+                                  prevFiltered.filter((oferta) => oferta.id !== item.id)
+                                );
+                                
                                 Alert.alert(
                                   "✅ Éxito",
                                   "Oferta eliminada correctamente"
                                 );
-                                cargarOfertas();
+                                console.log("✅ Estado actualizado: Oferta ID", item.id, "eliminada de la lista local");
                               } catch (error: any) {
                                 console.error("❌ Error eliminando oferta:", error);
                                 Alert.alert(

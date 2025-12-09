@@ -1,83 +1,110 @@
 import { StyleSheet } from 'react-native';
-import { Colors, Typography, Spacing, Border, Shadows } from './GlobalStyles';
+import {
+  COLORS,
+  FONTS,
+  SPACING,
+  SIZES,
+  SHADOW_STYLES,
+  Border,
+} from './GlobalStyles';
+
+/**
+ * 📑 SUBCATEGORIES SCREEN STYLES
+ * Estilos refactorizados con Design Tokens profesionales
+ */
 
 export const subcategoriesStyles = StyleSheet.create({
-  // Container
+  // ===== CONTENEDOR =====
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: COLORS.background,
   },
 
-  // Loading
+  // ===== LOADING =====
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.background,
+    backgroundColor: COLORS.background,
   },
+
   loadingText: {
-    marginTop: Spacing.md,
-    fontSize: Typography.fontSize.base,
-    color: Colors.gray[600],
+    marginTop: SPACING.md,
+    fontSize: FONTS.sizes.body,
+    color: COLORS.textSecondary,
   },
 
-  // Header
+  // ===== HEADER =====
   header: {
-    backgroundColor: Colors.white,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.xl,
+    backgroundColor: COLORS.surface,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.xl,
     borderBottomWidth: Border.width.thin,
-    borderBottomColor: Colors.gray[200],
+    borderBottomColor: COLORS.cardBorder,
   },
+
   headerTitle: {
-    fontSize: Typography.fontSize.xl,
-    fontWeight: Typography.fontWeight.bold,
-    color: Colors.black,
-    marginBottom: Spacing.xs,
+    fontSize: FONTS.sizes.h2,
+    fontWeight: FONTS.weights.bold,
+    color: COLORS.textPrimary,
+    marginBottom: SPACING.xs,
   },
+
   headerSubtitle: {
-    fontSize: Typography.fontSize.sm,
-    color: Colors.gray[600],
+    fontSize: FONTS.sizes.small,
+    color: COLORS.textSecondary,
   },
 
-  // Actions
+  // ===== ACCIONES =====
   actionsContainer: {
-    padding: Spacing.lg,
-    backgroundColor: Colors.white,
+    padding: SPACING.lg,
+    backgroundColor: COLORS.surface,
     borderBottomWidth: Border.width.thin,
-    borderBottomColor: Colors.gray[200],
+    borderBottomColor: COLORS.cardBorder,
   },
 
-  // Cards
+  // ===== LISTA DE TARJETAS =====
   list: {
     flex: 1,
   },
+
   listContent: {
-    padding: Spacing.lg,
+    padding: SPACING.lg,
   },
+
+  // ===== TARJETA =====
   card: {
-    backgroundColor: Colors.white,
-    borderRadius: Border.radius.lg,
-    padding: Spacing.lg,
-    marginBottom: Spacing.md,
-    borderWidth: Border.width.thin,
-    borderColor: Colors.gray[200],
-    ...Shadows.small,
+    backgroundColor: COLORS.surface,
+    borderRadius: SIZES.radiusCard,
+    padding: SPACING.lg,
+    marginBottom: SPACING.md,
+    borderWidth: 1,
+    borderColor: COLORS.cardBorder,
+    ...SHADOW_STYLES.card,
   },
+
+  cardHighlight: {
+    backgroundColor: COLORS.primaryVery,
+    borderColor: COLORS.primary,
+    borderWidth: 2,
+  },
+
   cardContent: {
     flex: 1,
-    marginBottom: Spacing.md,
+    marginBottom: SPACING.md,
   },
+
   cardTitle: {
-    fontSize: Typography.fontSize.lg,
-    fontWeight: Typography.fontWeight.semibold,
-    color: Colors.black,
-    marginBottom: Spacing.xs,
+    fontSize: FONTS.sizes.h3,
+    fontWeight: FONTS.weights.semibold,
+    color: COLORS.textPrimary,
+    marginBottom: SPACING.xs,
   },
+
   cardSubtitle: {
-    fontSize: Typography.fontSize.sm,
-    color: Colors.gray[600],
-    marginBottom: Spacing.xs,
+    fontSize: FONTS.sizes.small,
+    color: COLORS.textSecondary,
+    marginBottom: SPACING.xs,
   },
   cardMeta: {
     fontSize: Typography.fontSize.xs,

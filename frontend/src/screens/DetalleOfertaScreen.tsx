@@ -90,6 +90,53 @@ const DetalleOfertaScreen = ({ navigation, route }: any) => {
     }
   };
 
+  const handleEliminarOferta = async () => {
+    if (!user) {
+      Alert.alert("Error", "Debes iniciar sesión");
+      return;
+    }
+
+    if (user.role !== "ADMIN" && user.role !== "RECLUTADOR") {
+      Alert.alert("Error", "No tienes permisos para eliminar ofertas");
+      return;
+    }
+
+    Alert.alert(
+      "❌ Eliminar Oferta",
+      `¿Está seguro que desea eliminar "${oferta.titulo}"?\n\nEsta acción no se puede deshacer.`,
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Eliminar",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              console.log(
+                "🗑️ Eliminando oferta ID:",
+                oferta.id,
+                "por usuario:",
+                user?.username
+              );
+              await ofertaService.delete(oferta.id, user.id);
+              Alert.alert("✅ Éxito", "Oferta eliminada correctamente", [
+                {
+                  text: "OK",
+                  onPress: () => navigation.goBack(),
+                },
+              ]);
+            } catch (error: any) {
+              console.error("❌ Error eliminando oferta:", error);
+              Alert.alert(
+                "Error",
+                error.response?.data?.message || "Error al eliminar oferta"
+              );
+            }
+          },
+        },
+      ]
+    );
+  };
+
   if (loading) {
     return (
       <View style={styles.centerContainer}>
@@ -179,12 +226,24 @@ const DetalleOfertaScreen = ({ navigation, route }: any) => {
         )}
 
         {(user?.role === "RECLUTADOR" || user?.role === "ADMIN") && (
-          <TouchableOpacity
-            style={styles.editBtn}
-            onPress={() => Alert.alert("Editar", "Función de editar no implementada aún")}
-          >
-            <Text style={styles.editBtnText}>Editar Oferta</Text>
-          </TouchableOpacity>
+          <>
+            <TouchableOpacity
+              style={styles.editBtn}
+              onPress={() => {
+                console.log("✏️ Navegando a edición de oferta:", oferta.id);
+                navigation.navigate("CrearOferta", { ofertaId: oferta.id });
+              }}
+            >
+              <Text style={styles.editBtnText}>✏️ Editar Oferta</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.deleteBtn}
+              onPress={handleEliminarOferta}
+            >
+              <Text style={styles.deleteBtnText}>🗑️ Eliminar Oferta</Text>
+            </TouchableOpacity>
+          </>
         )}
 
         <TouchableOpacity
@@ -324,6 +383,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   editBtnText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  deleteBtn: {
+    backgroundColor: "#f44336",
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  deleteBtnText: {
     color: "white",
     fontSize: 16,
     fontWeight: "bold",

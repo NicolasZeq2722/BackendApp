@@ -1,189 +1,222 @@
-import { StyleSheet } from 'react-native';
-import { Colors, Typography, Spacing, Border, Shadows } from './GlobalStyles';
+import { StyleSheet, Platform } from 'react-native';
+import {
+  COLORS,
+  FONTS,
+  SPACING,
+  SIZES,
+  SHADOW_STYLES,
+} from './GlobalStyles';
 
 export const loginStyles = StyleSheet.create({
+  // ===== CONTENEDOR PRINCIPAL =====
   container: {
     flex: 1,
-    backgroundColor: Colors.primary,
+    backgroundColor: COLORS.primary, // Fondo azul completo
   },
+
+  keyboardAvoidingView: {
+    flex: 1,
+  },
+
   scrollContainer: {
     flexGrow: 1,
     justifyContent: 'center',
-    padding: Spacing.lg,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.xl,
   },
-  
-  // Header con logo/título
+
+  // ===== HEADER CON LOGO =====
   headerContainer: {
     alignItems: 'center',
-    marginBottom: Spacing['2xl'],
+    marginBottom: SPACING.xl,
+    paddingTop: SPACING.lg,
   },
-  logoContainer: {
-    width: 120,
-    height: 120,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: Border.radius.full,
+
+  // Estilo para el contenedor del logo (círculo)
+  logoContainer: { // Si usas esto en el futuro
+    width: 100,
+    height: 100,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: Spacing.lg,
-    borderWidth: 3,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    marginBottom: SPACING.md,
+    borderWidth: 2,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
   },
-  logoIcon: {
-    fontSize: 50,
-    color: Colors.white,
-  },
+
   appTitle: {
-    fontSize: Typography.fontSize['3xl'],
-    fontWeight: Typography.fontWeight.bold,
-    color: Colors.white,
+    fontSize: FONTS.sizes.hero,
+    fontWeight: FONTS.weights.bold,
+    color: COLORS.white,
     textAlign: 'center',
-    marginBottom: Spacing.sm,
+    marginBottom: SPACING.xs,
   },
+
   appSubtitle: {
-    fontSize: Typography.fontSize.base,
+    fontSize: FONTS.sizes.body,
     color: 'rgba(255, 255, 255, 0.8)',
     textAlign: 'center',
+    marginBottom: SPACING.md,
   },
-  
-  // Formulario
+
+  // ===== FORMULARIO (La tarjeta blanca) =====
   formContainer: {
-    backgroundColor: Colors.white,
-    borderRadius: Border.radius.xl,
-    padding: Spacing.xl,
-    ...Shadows.large,
+    backgroundColor: COLORS.surface,
+    borderRadius: SIZES.radiusCard,
+    padding: SPACING.xl,
+    // Sombra suave para dar profundidad
+    ...SHADOW_STYLES.large,
   },
+
   formTitle: {
-    fontSize: Typography.fontSize.xl,
-    fontWeight: Typography.fontWeight.bold,
-    color: Colors.black,
+    fontSize: FONTS.sizes.h2,
+    fontWeight: FONTS.weights.bold,
+    color: COLORS.textPrimary,
     textAlign: 'center',
-    marginBottom: Spacing.lg,
+    marginBottom: SPACING.lg,
   },
-  
-  // Campos de entrada
+
+  // ===== INPUTS (Aquí estaba el problema) =====
   inputContainer: {
-    marginBottom: Spacing.lg,
+    marginBottom: SPACING.lg,
   },
+
   inputLabel: {
-    fontSize: Typography.fontSize.sm,
-    fontWeight: Typography.fontWeight.semibold,
-    color: Colors.gray[700],
-    marginBottom: Spacing.sm,
+    fontSize: FONTS.sizes.small,
+    fontWeight: FONTS.weights.semibold,
+    color: COLORS.textPrimary,
+    marginBottom: SPACING.xs,
   },
+
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.gray[50],
-    borderWidth: Border.width.thin,
-    borderColor: Colors.gray[300],
-    borderRadius: Border.radius.lg,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
+    backgroundColor: COLORS.background, // Un gris muy suave (gray[50])
+    // 🛠️ TRUCO: Borde fijo de 2px siempre. 
+    // Antes cambiaba de 1px a 2px y eso movía todo el layout.
+    borderWidth: 2, 
+    borderColor: COLORS.inputBorder, 
+    borderRadius: SIZES.radiusInput,
+    paddingHorizontal: SPACING.md,
+    height: 55, // Altura fija para estabilidad
   },
+
+  // Estado Enfocado
   inputWrapperFocused: {
-    borderColor: Colors.primary,
-    borderWidth: Border.width.medium,
-    backgroundColor: Colors.white,
+    // Solo cambiamos el color, NO el tamaño del borde
+    borderColor: COLORS.primary, 
+    backgroundColor: COLORS.surface, // Se vuelve blanco puro al enfocar
   },
+
   inputIcon: {
-    fontSize: Typography.fontSize.lg,
-    color: Colors.gray[400],
-    marginRight: Spacing.sm,
+    fontSize: 20,
+    color: COLORS.textSecondary,
+    marginRight: SPACING.sm,
   },
+
   input: {
     flex: 1,
-    fontSize: Typography.fontSize.base,
-    color: Colors.black,
-    paddingVertical: Spacing.sm,
+    fontSize: FONTS.sizes.body,
+    color: COLORS.textPrimary,
+    height: '100%', // Ocupa toda la altura del wrapper
   },
-  
-  // Botones
-  buttonContainer: {
-    marginTop: Spacing.lg,
-  },
-  loginButton: {
-    backgroundColor: Colors.primary,
-    borderRadius: Border.radius.lg,
-    paddingVertical: Spacing.lg,
+
+  // ===== ERRORES =====
+  errorContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
-    ...Shadows.medium,
+    backgroundColor: '#FEF2F2', // Rojo muy suave
+    borderRadius: SIZES.radiusBtn,
+    padding: SPACING.sm,
+    marginBottom: SPACING.md,
+    borderWidth: 1,
+    borderColor: '#FECACA',
   },
-  loginButtonPressed: {
-    backgroundColor: Colors.primaryDark,
-    transform: [{ scale: 0.98 }],
+
+  errorIcon: {
+    fontSize: 16,
+    color: COLORS.error,
+    marginRight: SPACING.xs,
   },
+
+  errorText: {
+    color: COLORS.error,
+    fontSize: FONTS.sizes.small,
+    flex: 1,
+    fontWeight: FONTS.weights.medium,
+  },
+
+  // ===== BOTÓN =====
+  buttonContainer: {
+    marginTop: SPACING.md,
+  },
+
+  loginButton: {
+    backgroundColor: COLORS.primary,
+    borderRadius: SIZES.radiusBtn,
+    paddingVertical: SPACING.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 55,
+    ...SHADOW_STYLES.small,
+  },
+
   loginButtonDisabled: {
-    backgroundColor: Colors.gray[400],
-    opacity: 0.6,
+    opacity: 0.7,
+    backgroundColor: COLORS.textLight,
   },
-  loginButtonText: {
-    color: Colors.white,
-    fontSize: Typography.fontSize.lg,
-    fontWeight: Typography.fontWeight.bold,
-  },
-  
-  // Estados de carga y error
+
   loadingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: Spacing.lg,
   },
+
   loadingText: {
-    color: Colors.white,
-    fontSize: Typography.fontSize.base,
-    marginLeft: Spacing.sm,
-    fontWeight: Typography.fontWeight.medium,
+    color: COLORS.white,
+    marginLeft: SPACING.sm,
+    fontSize: FONTS.sizes.body,
   },
-  errorContainer: {
-    backgroundColor: Colors.error,
-    borderRadius: Border.radius.md,
-    padding: Spacing.md,
-    marginBottom: Spacing.lg,
-    flexDirection: 'row',
-    alignItems: 'center',
+
+  loginButtonText: {
+    color: COLORS.white,
+    fontSize: FONTS.sizes.h3,
+    fontWeight: FONTS.weights.bold,
   },
-  errorIcon: {
-    fontSize: Typography.fontSize.base,
-    color: Colors.white,
-    marginRight: Spacing.sm,
-  },
-  errorText: {
-    color: Colors.white,
-    fontSize: Typography.fontSize.sm,
-    flex: 1,
-    fontWeight: Typography.fontWeight.medium,
-  },
-  
-  // Footer
-  footerContainer: {
-    marginTop: Spacing.xl,
-    alignItems: 'center',
-  },
-  footerText: {
-    color: 'rgba(255, 255, 255, 0.7)',
-    fontSize: Typography.fontSize.sm,
-    textAlign: 'center',
-  },
-  
-  // Credenciales de prueba
+
+  // ===== CREDENCIALES Y FOOTER =====
   credentialsContainer: {
+    marginTop: SPACING.xl,
+    padding: SPACING.md,
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: Border.radius.lg,
-    padding: Spacing.md,
-    marginTop: Spacing.lg,
+    borderRadius: SIZES.radiusCard,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
   },
+
   credentialsTitle: {
-    color: Colors.white,
-    fontSize: Typography.fontSize.sm,
-    fontWeight: Typography.fontWeight.bold,
+    color: COLORS.white,
+    fontWeight: FONTS.weights.bold,
+    fontSize: FONTS.sizes.small,
     textAlign: 'center',
-    marginBottom: Spacing.sm,
+    marginBottom: SPACING.xs,
   },
+
   credentialsText: {
     color: 'rgba(255, 255, 255, 0.8)',
-    fontSize: Typography.fontSize.sm,
+    fontSize: FONTS.sizes.tiny,
     textAlign: 'center',
-    lineHeight: 20,
+    lineHeight: 18,
+  },
+
+  footerContainer: {
+    marginTop: SPACING.xl,
+    alignItems: 'center',
+  },
+
+  footerText: {
+    color: 'rgba(255, 255, 255, 0.6)',
+    fontSize: FONTS.sizes.tiny,
+    textAlign: 'center',
   },
 });

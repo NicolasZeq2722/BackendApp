@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   StyleSheet,
   RefreshControl,
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import { postulacionService, authService } from "../services/api";
 
 const PostulacionesScreen = ({ navigation }: any) => {
@@ -19,8 +20,21 @@ const PostulacionesScreen = ({ navigation }: any) => {
 
   useEffect(() => {
     loadUser();
-    loadPostulaciones();
   }, []);
+
+  // 🔄 useFocusEffect: Recargar postulaciones CADA VEZ que la pantalla recibe foco
+  // Esto limpia postulaciones fantasma cuando se elimina una oferta
+  useFocusEffect(
+    useCallback(() => {
+      console.log("🔄 PostulacionesScreen en foco - Recargando postulaciones...");
+      loadPostulaciones();
+
+      // Función de limpieza (opcional)
+      return () => {
+        console.log("📴 PostulacionesScreen desenfocada");
+      };
+    }, [])
+  );
 
   const loadUser = async () => {
     try {

@@ -55,7 +55,12 @@ public class Oferta {
     @Column(nullable = false)
     private Boolean activa = true; // soft delete
 
-    @OneToMany(mappedBy = "oferta", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(
+        mappedBy = "oferta",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true,
+        fetch = FetchType.LAZY
+    )
     @JsonIgnore
     private List<Postulacion> postulaciones;
 

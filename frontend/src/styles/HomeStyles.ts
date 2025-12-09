@@ -1,193 +1,325 @@
 import { StyleSheet } from 'react-native';
-import { Colors, Typography, Spacing, Border, Shadows } from './GlobalStyles';
+import {
+  COLORS,
+  FONTS,
+  SPACING,
+  SIZES,
+  SHADOW_STYLES,
+  Border,
+  GRADIENTS,
+} from './GlobalStyles';
+
+/**
+ * 🏠 HOME SCREEN STYLES
+ * Estilos refactorizados con Design Tokens profesionales
+ * Incluye header con gradiente, tarjetas de estadísticas y menú de navegación
+ */
 
 export const homeStyles = StyleSheet.create({
+  // ===== CONTENEDOR PRINCIPAL =====
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: COLORS.background,
   },
+
   scrollContainer: {
     flexGrow: 1,
+    paddingBottom: SPACING.lg,
   },
-  
-  // Header personalizado
+
+  // ===== HEADER PERSONALIZADO CON GRADIENTE =====
+  // NOTA: Envuelve el contenido en <LinearGradient colors={GRADIENTS.primary}>
   header: {
-    backgroundColor: Colors.primary,
-    paddingTop: Spacing['2xl'],
-    paddingBottom: Spacing.xl,
-    paddingHorizontal: Spacing.lg,
-    borderBottomLeftRadius: Border.radius['2xl'],
-    borderBottomRightRadius: Border.radius['2xl'],
-    ...Shadows.large,
+    paddingTop: SPACING['2xl'],
+    paddingBottom: SPACING.xl,
+    paddingHorizontal: SPACING.lg,
+    borderBottomLeftRadius: SIZES.radiusCard + 8,
+    borderBottomRightRadius: SIZES.radiusCard + 8,
+    ...SHADOW_STYLES.large,
   },
+
   welcomeContainer: {
     alignItems: 'center',
   },
+
   welcomeText: {
-    color: Colors.white,
-    fontSize: Typography.fontSize.lg,
-    fontWeight: Typography.fontWeight.medium,
-    marginBottom: Spacing.xs,
+    color: COLORS.textWhite,
+    fontSize: FONTS.sizes.body,
+    fontWeight: FONTS.weights.medium,
+    marginBottom: SPACING.xs,
     opacity: 0.9,
   },
+
   userName: {
-    color: Colors.white,
-    fontSize: Typography.fontSize['3xl'],
-    fontWeight: Typography.fontWeight.bold,
-    marginBottom: Spacing.sm,
+    color: COLORS.textWhite,
+    fontSize: FONTS.sizes.hero,
+    fontWeight: FONTS.weights.bold,
+    marginBottom: SPACING.sm,
+    textAlign: 'center',
   },
+
   userRole: {
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-    borderRadius: Border.radius.full,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.xs,
+    borderRadius: SIZES.radiusBadge,
     alignSelf: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
   },
+
   userRoleText: {
-    color: Colors.white,
-    fontSize: Typography.fontSize.sm,
-    fontWeight: Typography.fontWeight.semibold,
+    color: COLORS.textWhite,
+    fontSize: FONTS.sizes.small,
+    fontWeight: FONTS.weights.semibold,
   },
-  
-  // Estadísticas
+
+  // ===== CONTENEDOR DE ESTADÍSTICAS =====
   statsContainer: {
-    margin: Spacing.lg,
-    backgroundColor: Colors.white,
-    borderRadius: Border.radius.xl,
-    padding: Spacing.lg,
-    ...Shadows.medium,
+    marginHorizontal: SPACING.lg,
+    marginVertical: SPACING.lg,
+    backgroundColor: COLORS.surface,
+    borderRadius: SIZES.radiusCard,
+    padding: SPACING.lg,
+    borderWidth: 1,
+    borderColor: COLORS.cardBorder,
+    ...SHADOW_STYLES.card,
   },
+
   statsHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: Spacing.lg,
+    marginBottom: SPACING.lg,
   },
+
   statsIcon: {
-    fontSize: Typography.fontSize.xl,
-    marginRight: Spacing.sm,
+    fontSize: FONTS.sizes.h1,
+    marginRight: SPACING.sm,
+    color: COLORS.primary,
   },
+
   statsTitle: {
-    fontSize: Typography.fontSize.lg,
-    fontWeight: Typography.fontWeight.bold,
-    color: Colors.black,
+    fontSize: FONTS.sizes.h3,
+    fontWeight: FONTS.weights.bold,
+    color: COLORS.textPrimary,
   },
+
+  // Estados de carga y error en stats
   loadingContainer: {
-    paddingVertical: Spacing.xl,
+    paddingVertical: SPACING.xl,
     alignItems: 'center',
   },
+
   loadingText: {
-    fontSize: Typography.fontSize.base,
-    color: Colors.gray[500],
-    marginTop: Spacing.sm,
+    fontSize: FONTS.sizes.body,
+    color: COLORS.textSecondary,
+    marginTop: SPACING.sm,
   },
+
   errorContainer: {
-    paddingVertical: Spacing.lg,
+    paddingVertical: SPACING.lg,
     alignItems: 'center',
+    backgroundColor: COLORS.errorLight,
+    borderRadius: SIZES.radiusCard,
+    paddingHorizontal: SPACING.md,
   },
+
   errorText: {
-    fontSize: Typography.fontSize.base,
-    color: Colors.error,
+    fontSize: FONTS.sizes.small,
+    color: COLORS.error,
     textAlign: 'center',
+    fontWeight: FONTS.weights.medium,
   },
+
+  // Grid de estadísticas
   statsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+    gap: SPACING.md,
   },
+
   statCard: {
     width: '48%',
-    backgroundColor: Colors.gray[50],
-    borderRadius: Border.radius.lg,
-    padding: Spacing.md,
-    marginBottom: Spacing.md,
+    backgroundColor: COLORS.gray[50],
+    borderRadius: SIZES.radiusCard,
+    padding: SPACING.lg,
     alignItems: 'center',
-    borderWidth: Border.width.thin,
-    borderColor: Colors.gray[200],
+    borderWidth: 1,
+    borderColor: COLORS.cardBorder,
+    ...SHADOW_STYLES.small,
   },
+
+  statCardHighlight: {
+    backgroundColor: COLORS.primaryVery,
+    borderColor: COLORS.primary,
+    borderWidth: 2,
+  },
+
   statNumber: {
-    fontSize: Typography.fontSize['2xl'],
-    fontWeight: Typography.fontWeight.bold,
-    color: Colors.primary,
-    marginBottom: Spacing.xs,
+    fontSize: FONTS.sizes.hero,
+    fontWeight: FONTS.weights.bold,
+    color: COLORS.primary,
+    marginBottom: SPACING.xs,
   },
+
   statLabel: {
-    fontSize: Typography.fontSize.sm,
-    color: Colors.gray[600],
+    fontSize: FONTS.sizes.small,
+    color: COLORS.textSecondary,
     textAlign: 'center',
-    fontWeight: Typography.fontWeight.medium,
+    fontWeight: FONTS.weights.medium,
+    lineHeight: 16,
   },
-  
-  // Menú de navegación
+
+  statSubtext: {
+    fontSize: FONTS.sizes.tiny,
+    color: COLORS.textLight,
+    marginTop: SPACING.xs,
+    fontWeight: FONTS.weights.regular,
+  },
+
+  // ===== MENÚ DE NAVEGACIÓN =====
   menuContainer: {
-    padding: Spacing.lg,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
   },
+
   menuTitle: {
-    fontSize: Typography.fontSize.xl,
-    fontWeight: Typography.fontWeight.bold,
-    color: Colors.black,
-    marginBottom: Spacing.lg,
+    fontSize: FONTS.sizes.h2,
+    fontWeight: FONTS.weights.bold,
+    color: COLORS.textPrimary,
+    marginBottom: SPACING.lg,
     textAlign: 'center',
   },
+
   menuGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+    gap: SPACING.md,
   },
+
+  // Botón del menú
   menuButton: {
     width: '48%',
-    backgroundColor: Colors.white,
-    borderRadius: Border.radius.xl,
-    padding: Spacing.lg,
-    marginBottom: Spacing.md,
+    backgroundColor: COLORS.surface,
+    borderRadius: SIZES.radiusCard,
+    padding: SPACING.lg,
     alignItems: 'center',
-    ...Shadows.medium,
-    borderWidth: Border.width.thin,
-    borderColor: Colors.gray[100],
+    borderWidth: 1,
+    borderColor: COLORS.cardBorder,
+    ...SHADOW_STYLES.card,
   },
+
+  menuButtonActive: {
+    backgroundColor: COLORS.primaryVery,
+    borderColor: COLORS.primary,
+    borderWidth: 2,
+  },
+
   menuButtonPressed: {
     transform: [{ scale: 0.95 }],
     opacity: 0.8,
   },
+
   menuIcon: {
-    fontSize: Typography.fontSize['3xl'],
-    marginBottom: Spacing.sm,
+    fontSize: FONTS.sizes.h1,
+    marginBottom: SPACING.sm,
+    color: COLORS.primary,
   },
+
   menuButtonText: {
-    fontSize: Typography.fontSize.base,
-    fontWeight: Typography.fontWeight.semibold,
-    color: Colors.black,
+    fontSize: FONTS.sizes.body,
+    fontWeight: FONTS.weights.semibold,
+    color: COLORS.textPrimary,
+    textAlign: 'center',
+    lineHeight: 18,
+  },
+
+  menuButtonSubtext: {
+    fontSize: FONTS.sizes.tiny,
+    color: COLORS.textLight,
+    marginTop: SPACING.xs,
     textAlign: 'center',
   },
-  
-  // Botón de logout especial
+
+  // ===== BOTÓN LOGOUT ESPECIAL =====
   logoutButtonContainer: {
-    marginTop: Spacing.lg,
-    paddingHorizontal: Spacing.md,
+    marginTop: SPACING.lg,
+    marginHorizontal: SPACING.lg,
+    marginBottom: SPACING.lg,
   },
+
+  // Para envolver en gradiente: <LinearGradient colors={GRADIENTS.error}>
   logoutButton: {
-    backgroundColor: Colors.error,
-    borderRadius: Border.radius.xl,
-    padding: Spacing.lg,
+    borderRadius: SIZES.radiusCard,
+    paddingVertical: SPACING.lg,
+    paddingHorizontal: SPACING.lg,
     alignItems: 'center',
-    ...Shadows.medium,
+    ...SHADOW_STYLES.card,
   },
+
+  logoutButtonFallback: {
+    backgroundColor: COLORS.error,
+    borderRadius: SIZES.radiusCard,
+    paddingVertical: SPACING.lg,
+    paddingHorizontal: SPACING.lg,
+    alignItems: 'center',
+    ...SHADOW_STYLES.card,
+  },
+
+  logoutButtonPressed: {
+    opacity: 0.8,
+    transform: [{ scale: 0.98 }],
+  },
+
   logoutIcon: {
-    fontSize: Typography.fontSize.xl,
-    color: Colors.white,
-    marginBottom: Spacing.xs,
+    fontSize: FONTS.sizes.h2,
+    color: COLORS.textWhite,
+    marginBottom: SPACING.xs,
   },
+
   logoutButtonText: {
-    fontSize: Typography.fontSize.base,
-    fontWeight: Typography.fontWeight.bold,
-    color: Colors.white,
+    fontSize: FONTS.sizes.h3,
+    fontWeight: FONTS.weights.bold,
+    color: COLORS.textWhite,
   },
-  
-  // Animaciones
+
+  // ===== ANIMACIONES & ESTADOS =====
   fadeIn: {
     opacity: 1,
   },
+
   fadeOut: {
     opacity: 0,
+  },
+
+  skeletonLoader: {
+    backgroundColor: COLORS.gray[200],
+    borderRadius: SIZES.radiusCard,
+    marginBottom: SPACING.md,
+    minHeight: 100,
+  },
+
+  // ===== HELPER: Contenedor con padding y centrado =====
+  emptyStateContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: SPACING.lg,
+  },
+
+  emptyStateIcon: {
+    fontSize: 64,
+    marginBottom: SPACING.lg,
+    opacity: 0.5,
+  },
+
+  emptyStateText: {
+    fontSize: FONTS.sizes.body,
+    color: COLORS.textSecondary,
+    textAlign: 'center',
+    marginBottom: SPACING.lg,
   },
 });

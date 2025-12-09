@@ -1,337 +1,408 @@
 import { StyleSheet } from 'react-native';
-import { Colors, Typography, Spacing, Border, Shadows } from './GlobalStyles';
+import {
+  COLORS,
+  FONTS,
+  SPACING,
+  SIZES,
+  SHADOW_STYLES,
+  Border,
+} from './GlobalStyles';
+
+/**
+ * 👥 USUARIOS SCREEN STYLES
+ * Estilos refactorizados con Design Tokens profesionales
+ * Incluye formularios, listados y controles de usuario
+ */
 
 export const usersStyles = StyleSheet.create({
+  // ===== CONTENEDOR =====
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: COLORS.background,
   },
-  
-  // Header
+
+  // ===== HEADER =====
   header: {
-    backgroundColor: Colors.white,
-    paddingVertical: Spacing.lg,
-    paddingHorizontal: Spacing.lg,
+    backgroundColor: COLORS.surface,
+    paddingVertical: SPACING.lg,
+    paddingHorizontal: SPACING.lg,
     borderBottomWidth: Border.width.thin,
-    borderBottomColor: Colors.gray[200],
-    ...Shadows.small,
+    borderBottomColor: COLORS.cardBorder,
+    ...SHADOW_STYLES.small,
   },
+
   headerContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+
   headerTitle: {
-    fontSize: Typography.fontSize.xl,
-    fontWeight: Typography.fontWeight.bold,
-    color: Colors.black,
+    fontSize: FONTS.sizes.h2,
+    fontWeight: FONTS.weights.bold,
+    color: COLORS.textPrimary,
   },
+
+  // ===== BOTÓN AGREGAR =====
   addButton: {
-    backgroundColor: Colors.primary,
-    borderRadius: Border.radius.lg,
-    paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.md,
+    backgroundColor: COLORS.success,
+    borderRadius: SIZES.radiusBtn,
+    paddingVertical: SPACING.sm,
+    paddingHorizontal: SPACING.md,
     flexDirection: 'row',
     alignItems: 'center',
-    ...Shadows.small,
+    ...SHADOW_STYLES.small,
   },
+
   addButtonIcon: {
-    color: Colors.white,
-    fontSize: Typography.fontSize.base,
-    marginRight: Spacing.xs,
+    color: COLORS.white,
+    fontSize: FONTS.sizes.body,
+    marginRight: SPACING.xs,
   },
+
   addButtonText: {
-    color: Colors.white,
-    fontSize: Typography.fontSize.sm,
-    fontWeight: Typography.fontWeight.semibold,
+    color: COLORS.white,
+    fontSize: FONTS.sizes.small,
+    fontWeight: FONTS.weights.semibold,
   },
-  
-  // Estados
+
+  // ===== LOADING =====
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacing.xl,
+    padding: SPACING.xl,
   },
+
   loadingText: {
-    fontSize: Typography.fontSize.base,
-    color: Colors.gray[600],
-    marginTop: Spacing.md,
+    fontSize: FONTS.sizes.body,
+    color: COLORS.textSecondary,
+    marginTop: SPACING.md,
   },
+
+  // ===== ERROR =====
   errorContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacing.xl,
+    padding: SPACING.xl,
   },
+
   errorIcon: {
     fontSize: 50,
-    marginBottom: Spacing.md,
+    marginBottom: SPACING.md,
+    color: COLORS.error,
   },
+
   errorText: {
-    fontSize: Typography.fontSize.base,
-    color: Colors.error,
+    fontSize: FONTS.sizes.body,
+    color: COLORS.error,
     textAlign: 'center',
-    marginBottom: Spacing.lg,
+    marginBottom: SPACING.lg,
+    fontWeight: FONTS.weights.medium,
   },
+
   retryButton: {
-    backgroundColor: Colors.primary,
-    borderRadius: Border.radius.lg,
-    paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.lg,
+    backgroundColor: COLORS.primary,
+    borderRadius: SIZES.radiusBtn,
+    paddingVertical: SPACING.md,
+    paddingHorizontal: SPACING.lg,
+    ...SHADOW_STYLES.small,
   },
+
   retryButtonText: {
-    color: Colors.white,
-    fontSize: Typography.fontSize.base,
-    fontWeight: Typography.fontWeight.semibold,
+    color: COLORS.white,
+    fontSize: FONTS.sizes.body,
+    fontWeight: FONTS.weights.semibold,
   },
-  
-  // Lista
+
+  // ===== LISTA =====
   listContainer: {
-    padding: Spacing.md,
+    padding: SPACING.md,
   },
+
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacing.xl,
+    padding: SPACING.xl,
   },
+
   emptyIcon: {
     fontSize: 60,
-    marginBottom: Spacing.lg,
+    marginBottom: SPACING.lg,
+    color: COLORS.textLight,
   },
+
   emptyText: {
-    fontSize: Typography.fontSize.lg,
-    color: Colors.gray[500],
+    fontSize: FONTS.sizes.h2,
+    color: COLORS.textSecondary,
     textAlign: 'center',
-    marginBottom: Spacing.sm,
+    marginBottom: SPACING.sm,
   },
+
   emptySubtext: {
-    fontSize: Typography.fontSize.base,
-    color: Colors.gray[400],
+    fontSize: FONTS.sizes.body,
+    color: COLORS.textLight,
     textAlign: 'center',
   },
-  
-  // Card de usuario
+
+  // ===== CARD DE USUARIO =====
   userCard: {
-    backgroundColor: Colors.white,
-    borderRadius: Border.radius.lg,
-    padding: Spacing.lg,
-    marginBottom: Spacing.md,
-    ...Shadows.medium,
+    backgroundColor: COLORS.surface,
+    borderRadius: SIZES.radiusCard,
+    padding: SPACING.lg,
+    marginBottom: SPACING.md,
     borderLeftWidth: 4,
-    borderLeftColor: Colors.primary,
+    borderLeftColor: COLORS.primary,
+    // Sombra para tarjetas
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
+
   userCardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: Spacing.sm,
+    marginBottom: SPACING.sm,
   },
+
   userInfo: {
     flex: 1,
   },
+
   userName: {
-    fontSize: Typography.fontSize.lg,
-    fontWeight: Typography.fontWeight.bold,
-    color: Colors.black,
-    marginBottom: Spacing.xs,
+    fontSize: FONTS.sizes.h2,
+    fontWeight: FONTS.weights.bold,
+    color: COLORS.textPrimary,
+    marginBottom: SPACING.xs,
   },
+
   userEmail: {
-    fontSize: Typography.fontSize.base,
-    color: Colors.gray[600],
-    marginBottom: Spacing.sm,
+    fontSize: FONTS.sizes.body,
+    color: COLORS.textSecondary,
+    marginBottom: SPACING.sm,
   },
-  
-  // Estado y rol
+
+  // ===== ESTADO Y ROL =====
   userMeta: {
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',
-    gap: Spacing.sm,
+    gap: SPACING.sm,
   },
+
   roleBadge: {
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: Spacing.xs,
-    borderRadius: Border.radius.md,
-    backgroundColor: Colors.info,
+    paddingHorizontal: SPACING.sm,
+    paddingVertical: SPACING.xs,
+    borderRadius: SIZES.radiusBadge, // Usando SIZES en lugar de Border.radius
+    backgroundColor: COLORS.primary, // 'info' mapeado a primary
   },
+
   roleBadgeAdmin: {
-    backgroundColor: Colors.accent,
+    backgroundColor: COLORS.secondary, // 'accent' mapeado a secondary
   },
+
   roleBadgeText: {
-    color: Colors.white,
-    fontSize: Typography.fontSize.xs,
-    fontWeight: Typography.fontWeight.semibold,
+    color: COLORS.white,
+    fontSize: FONTS.sizes.tiny, // 'xs' mapeado a tiny
+    fontWeight: FONTS.weights.semibold,
   },
+
   statusBadge: {
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: Spacing.xs,
-    borderRadius: Border.radius.md,
+    paddingHorizontal: SPACING.sm,
+    paddingVertical: SPACING.xs,
+    borderRadius: SIZES.radiusBadge,
   },
+
   statusBadgeActive: {
-    backgroundColor: Colors.success,
+    backgroundColor: COLORS.success,
   },
+
   statusBadgeInactive: {
-    backgroundColor: Colors.gray[400],
+    backgroundColor: COLORS.textLight, // 'gray[400]' mapeado a textLight
   },
+
   statusBadgeText: {
-    color: Colors.white,
-    fontSize: Typography.fontSize.xs,
-    fontWeight: Typography.fontWeight.semibold,
+    color: COLORS.white,
+    fontSize: FONTS.sizes.tiny,
+    fontWeight: FONTS.weights.semibold,
   },
-  
-  // Acciones
+
+  // ===== ACCIONES =====
   actionsContainer: {
     flexDirection: 'row',
-    gap: Spacing.sm,
-    marginTop: Spacing.md,
+    gap: SPACING.sm,
+    marginTop: SPACING.md,
   },
+
   actionButton: {
-    borderRadius: Border.radius.md,
-    paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.md,
+    borderRadius: SIZES.radiusBtn,
+    paddingVertical: SPACING.sm,
+    paddingHorizontal: SPACING.md,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
   },
+
   editButton: {
-    backgroundColor: Colors.warning,
+    backgroundColor: COLORS.secondary, // 'warning' mapeado a secondary (amber)
   },
+
   deleteButton: {
-    backgroundColor: Colors.error,
+    backgroundColor: COLORS.error,
   },
+
   actionButtonIcon: {
-    color: Colors.white,
-    fontSize: Typography.fontSize.sm,
-    marginRight: Spacing.xs,
+    color: COLORS.white,
+    fontSize: FONTS.sizes.small,
+    marginRight: SPACING.xs,
   },
+
   actionButtonText: {
-    color: Colors.white,
-    fontSize: Typography.fontSize.sm,
-    fontWeight: Typography.fontWeight.medium,
+    color: COLORS.white,
+    fontSize: FONTS.sizes.small,
+    fontWeight: FONTS.weights.medium,
   },
-  
-  // Modal de formulario
+
+  // ===== MODAL DE FORMULARIO =====
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacing.lg,
+    padding: SPACING.lg,
   },
+
   modalContent: {
-    backgroundColor: Colors.white,
-    borderRadius: Border.radius.xl,
-    padding: Spacing.xl,
+    backgroundColor: COLORS.surface,
+    borderRadius: SIZES.radiusCard,
+    padding: SPACING.xl,
     width: '100%',
     maxHeight: '80%',
-    ...Shadows.large,
   },
+
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Spacing.lg,
-    paddingBottom: Spacing.md,
+    marginBottom: SPACING.lg,
+    paddingBottom: SPACING.md,
     borderBottomWidth: Border.width.thin,
-    borderBottomColor: Colors.gray[200],
+    borderBottomColor: COLORS.cardBorder,
   },
+
   modalTitle: {
-    fontSize: Typography.fontSize.xl,
-    fontWeight: Typography.fontWeight.bold,
-    color: Colors.black,
+    fontSize: FONTS.sizes.h2,
+    fontWeight: FONTS.weights.bold,
+    color: COLORS.textPrimary,
   },
+
   closeButton: {
-    padding: Spacing.sm,
+    padding: SPACING.sm,
   },
+
   closeButtonText: {
-    fontSize: Typography.fontSize.lg,
-    color: Colors.gray[500],
+    fontSize: FONTS.sizes.h2,
+    color: COLORS.textSecondary,
   },
-  
-  // Formulario
+
+  // ===== FORMULARIO =====
   formContainer: {
-    marginBottom: Spacing.lg,
+    marginBottom: SPACING.lg,
   },
+
   inputGroup: {
-    marginBottom: Spacing.lg,
+    marginBottom: SPACING.lg,
   },
+
   inputLabel: {
-    fontSize: Typography.fontSize.sm,
-    fontWeight: Typography.fontWeight.semibold,
-    color: Colors.gray[700],
-    marginBottom: Spacing.sm,
+    fontSize: FONTS.sizes.small,
+    fontWeight: FONTS.weights.semibold,
+    color: COLORS.textPrimary,
+    marginBottom: SPACING.sm,
   },
+
   input: {
-    backgroundColor: Colors.gray[50],
+    backgroundColor: COLORS.background, // 'gray[50]'
     borderWidth: Border.width.thin,
-    borderColor: Colors.gray[300],
-    borderRadius: Border.radius.lg,
-    paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.md,
-    fontSize: Typography.fontSize.base,
-    color: Colors.black,
+    borderColor: COLORS.inputBorder,
+    borderRadius: SIZES.radiusInput,
+    paddingVertical: SPACING.md,
+    paddingHorizontal: SPACING.md,
+    fontSize: FONTS.sizes.body,
+    color: COLORS.textPrimary,
   },
+
   inputFocused: {
-    borderColor: Colors.primary,
-    backgroundColor: Colors.white,
+    borderColor: COLORS.primary,
+    backgroundColor: COLORS.surface,
   },
-  
-  // Picker personalizado
+
+  // ===== PICKER & SWITCH =====
   pickerContainer: {
-    backgroundColor: Colors.gray[50],
+    backgroundColor: COLORS.background,
     borderWidth: Border.width.thin,
-    borderColor: Colors.gray[300],
-    borderRadius: Border.radius.lg,
+    borderColor: COLORS.inputBorder,
+    borderRadius: SIZES.radiusInput,
     overflow: 'hidden',
   },
+
   picker: {
     height: 50,
-    color: Colors.black,
+    color: COLORS.textPrimary,
   },
-  
-  // Switch personalizado
+
   switchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: Spacing.sm,
+    paddingVertical: SPACING.sm,
   },
+
   switchLabel: {
-    fontSize: Typography.fontSize.base,
-    color: Colors.gray[700],
+    fontSize: FONTS.sizes.body,
+    color: COLORS.textPrimary,
     flex: 1,
   },
-  
-  // Botones del modal
+
+  // ===== BOTONES DEL MODAL =====
   modalButtons: {
     flexDirection: 'row',
-    gap: Spacing.md,
-    marginTop: Spacing.lg,
+    gap: SPACING.md,
+    marginTop: SPACING.lg,
   },
+
   modalButton: {
     flex: 1,
-    borderRadius: Border.radius.lg,
-    paddingVertical: Spacing.md,
+    borderRadius: SIZES.radiusBtn,
+    paddingVertical: SPACING.md,
     alignItems: 'center',
     justifyContent: 'center',
   },
+
   cancelButton: {
-    backgroundColor: Colors.gray[300],
+    backgroundColor: COLORS.inputBorder, // 'gray[300]'
   },
+
   saveButton: {
-    backgroundColor: Colors.primary,
+    backgroundColor: COLORS.primary,
   },
+
   modalButtonText: {
-    fontSize: Typography.fontSize.base,
-    fontWeight: Typography.fontWeight.semibold,
+    fontSize: FONTS.sizes.body,
+    fontWeight: FONTS.weights.semibold,
   },
+
   cancelButtonText: {
-    color: Colors.gray[700],
+    color: COLORS.textSecondary,
   },
+
   saveButtonText: {
-    color: Colors.white,
+    color: COLORS.white,
   },
 });

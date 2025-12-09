@@ -1,24 +1,37 @@
 import { StyleSheet } from 'react-native';
-import { Colors, Typography, Spacing, Border, Shadows } from './GlobalStyles';
+import {
+  COLORS,
+  FONTS,
+  SPACING,
+  SIZES,
+  SHADOW_STYLES,
+  Border,
+} from './GlobalStyles';
+
+/**
+ * 💼 OFERTAS SCREEN STYLES
+ * Estilos refactorizados con Design Tokens profesionales
+ * Tarjetas con sombras multiplataforma y tipografía escalable
+ */
 
 export const productsStyles = StyleSheet.create({
-  // Container
+  // ===== CONTENEDOR =====
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: COLORS.background,
   },
 
-  // Loading
+  // ===== LOADING =====
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.background,
+    backgroundColor: COLORS.background,
   },
   loadingText: {
-    marginTop: Spacing.md,
-    fontSize: Typography.fontSize.base,
-    color: Colors.gray[600],
+    marginTop: SPACING.md,
+    fontSize: FONTS.sizes.body,
+    color: COLORS.textSecondary,
   },
 
   // Header

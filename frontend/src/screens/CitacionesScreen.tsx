@@ -153,8 +153,14 @@ const CitacionesScreen = ({ navigation }: any) => {
   };
 
   const handleSave = async () => {
+    // ✅ VALIDACIONES iniciales
     if (!formData.detallesCitacion || !formData.aspiranteId || !formData.ofertaId) {
       Alert.alert("Error", "Por favor complete todos los campos requeridos");
+      return;
+    }
+
+    if (!user?.id) {
+      Alert.alert("Error", "No se pudo obtener el ID del usuario. Por favor vuelva a iniciar sesión");
       return;
     }
 
@@ -163,16 +169,13 @@ const CitacionesScreen = ({ navigation }: any) => {
       const ofertaId = parseInt(formData.ofertaId);
 
       // 🔍 PASO 1: Buscar la postulación que coincida con aspirante + oferta
-      // El backend requiere postulacionId, no aspiranteId + ofertaId
       let postulacionId: number | null = null;
 
       if (!editingCitacion) {
-        // Al crear, necesitamos encontrar la postulación
         try {
           const response = await postulacionService.getByAspirante(aspiranteId);
           const postulaciones = response.data || [];
           
-          // Buscar postulación que tenga ofertaId que coincida
           const postulacion = postulaciones.find(
             (p: any) => p.oferta?.id === ofertaId || p.ofertaId === ofertaId
           );
@@ -193,7 +196,6 @@ const CitacionesScreen = ({ navigation }: any) => {
           return;
         }
       } else {
-        // Al editar, usar la postulación existente
         postulacionId = editingCitacion.postulacion?.id;
         if (!postulacionId) {
           Alert.alert("Error", "No se puede obtener la postulación de esta citación");
@@ -201,20 +203,25 @@ const CitacionesScreen = ({ navigation }: any) => {
         }
       }
 
-      // 📦 PASO 2: Construir el payload correcto para el backend
-      // El DTO CitacionCreateRequest espera: postulacionId, reclutadorId, fechaCitacion, hora, linkMeet, detallesCitacion, observaciones
+      // 📦 PASO 2: Construir payload con estructura correcta
       const citacionData = {
         postulacionId: postulacionId,
         reclutadorId: user.id,
         detallesCitacion: formData.detallesCitacion,
-        fechaCitacion: formData.fechaCitacion.toISOString().split("T")[0], // ISO string format YYYY-MM-DD
-        hora: formData.horaCitacion, // Formato HH:MM
-        linkMeet: formData.enlaceVideoLlamada || "", // Campo llamado linkMeet en backend
-        observaciones: "", // Campo adicional disponible en backend
+        fechaCitacion: formData.fechaCitacion.toISOString().split("T")[0],
+        hora: formData.horaCitacion,
+        linkMeet: formData.enlaceVideoLlamada || "",
+        observaciones: "",
       };
 
-      // 🔍 LOG: Ver exactamente qué se envía
-      console.log("📤 Payload enviado al backend:", JSON.stringify(citacionData, null, 2));
+      // ✅ VALIDACIÓN FINAL
+      if (!citacionData.postulacionId || !citacionData.reclutadorId) {
+        console.error("❌ Validación fallida:", citacionData);
+        Alert.alert("Error", "Los datos están incompletos. Intente de nuevo.");
+        return;
+      }
+
+      console.log("📤 Payload enviado:", JSON.stringify(citacionData, null, 2));
 
       if (editingCitacion) {
         console.log("✏️ Actualizando citación:", editingCitacion.id);
@@ -229,12 +236,16 @@ const CitacionesScreen = ({ navigation }: any) => {
       cargarCitaciones();
     } catch (error: any) {
       console.error("❌ Error al guardar citación:", error);
-      console.error("Detalles del error:", error.response?.data);
+      console.error("Respuesta del servidor:", error.response?.data);
+      
+      const errorMessage = error.response?.data?.message ||
+        error.response?.data ||
+        error.message ||
+        "Error desconocido";
+      
       Alert.alert(
-        "Error",
-        error.response?.data?.message || 
-        error.message || 
-        "Error al guardar citación"
+        "Error al guardar citación",
+        `${errorMessage}\n\nAsegúrate de que:\n- El aspirante esté postulado\n- Todos los campos sean válidos`
       );
     }
   };
