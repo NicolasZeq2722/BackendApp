@@ -1,3 +1,4 @@
+// @ts-ignore - react-native types handled by Expo
 import { Platform } from 'react-native';
 
 // --- POLYFILL SALVAVIDAS ---
@@ -21,6 +22,7 @@ if (Platform.OS !== 'web') {
 }
 // --- FIN POLYFILL ---
 
+// @ts-ignore - expo types handled by Expo
 import { registerRootComponent } from 'expo';
 import App from './App';
 

@@ -1,4 +1,4 @@
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet } from 'react-native';
 import {
   COLORS,
   FONTS,
@@ -11,7 +11,7 @@ export const loginStyles = StyleSheet.create({
   // ===== CONTENEDOR PRINCIPAL =====
   container: {
     flex: 1,
-    backgroundColor: COLORS.primary, // Fondo azul completo
+    backgroundColor: COLORS.primary,
   },
 
   keyboardAvoidingView: {
@@ -32,8 +32,7 @@ export const loginStyles = StyleSheet.create({
     paddingTop: SPACING.lg,
   },
 
-  // Estilo para el contenedor del logo (círculo)
-  logoContainer: { // Si usas esto en el futuro
+  logoContainer: {
     width: 100,
     height: 100,
     backgroundColor: 'rgba(255, 255, 255, 0.15)',
@@ -48,7 +47,7 @@ export const loginStyles = StyleSheet.create({
   appTitle: {
     fontSize: FONTS.sizes.hero,
     fontWeight: FONTS.weights.bold,
-    color: COLORS.white,
+    color: COLORS.textWhite,
     textAlign: 'center',
     marginBottom: SPACING.xs,
   },
@@ -60,12 +59,11 @@ export const loginStyles = StyleSheet.create({
     marginBottom: SPACING.md,
   },
 
-  // ===== FORMULARIO (La tarjeta blanca) =====
+  // ===== FORMULARIO =====
   formContainer: {
     backgroundColor: COLORS.surface,
     borderRadius: SIZES.radiusCard,
     padding: SPACING.xl,
-    // Sombra suave para dar profundidad
     ...SHADOW_STYLES.large,
   },
 
@@ -77,7 +75,7 @@ export const loginStyles = StyleSheet.create({
     marginBottom: SPACING.lg,
   },
 
-  // ===== INPUTS (Aquí estaba el problema) =====
+  // ===== INPUTS =====
   inputContainer: {
     marginBottom: SPACING.lg,
   },
@@ -92,21 +90,18 @@ export const loginStyles = StyleSheet.create({
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.background, // Un gris muy suave (gray[50])
-    // 🛠️ TRUCO: Borde fijo de 2px siempre. 
-    // Antes cambiaba de 1px a 2px y eso movía todo el layout.
-    borderWidth: 2, 
-    borderColor: COLORS.inputBorder, 
+    backgroundColor: COLORS.background,
+    borderWidth: 2, // Borde fijo para evitar saltos
+    borderColor: COLORS.inputBorder,
     borderRadius: SIZES.radiusInput,
     paddingHorizontal: SPACING.md,
-    height: 55, // Altura fija para estabilidad
+    height: 55, // Altura fija
+    // Eliminé paddingVertical para evitar conflictos con el texto centrado
   },
 
-  // Estado Enfocado
   inputWrapperFocused: {
-    // Solo cambiamos el color, NO el tamaño del borde
-    borderColor: COLORS.primary, 
-    backgroundColor: COLORS.surface, // Se vuelve blanco puro al enfocar
+    borderColor: COLORS.primary,
+    backgroundColor: COLORS.surface,
   },
 
   inputIcon: {
@@ -119,14 +114,14 @@ export const loginStyles = StyleSheet.create({
     flex: 1,
     fontSize: FONTS.sizes.body,
     color: COLORS.textPrimary,
-    height: '100%', // Ocupa toda la altura del wrapper
+    height: '100%',
   },
 
   // ===== ERRORES =====
   errorContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEF2F2', // Rojo muy suave
+    backgroundColor: '#FEF2F2',
     borderRadius: SIZES.radiusBtn,
     padding: SPACING.sm,
     marginBottom: SPACING.md,
@@ -173,13 +168,13 @@ export const loginStyles = StyleSheet.create({
   },
 
   loadingText: {
-    color: COLORS.white,
+    color: COLORS.textWhite,
     marginLeft: SPACING.sm,
     fontSize: FONTS.sizes.body,
   },
 
   loginButtonText: {
-    color: COLORS.white,
+    color: COLORS.textWhite,
     fontSize: FONTS.sizes.h3,
     fontWeight: FONTS.weights.bold,
   },
@@ -195,7 +190,7 @@ export const loginStyles = StyleSheet.create({
   },
 
   credentialsTitle: {
-    color: COLORS.white,
+    color: COLORS.textWhite,
     fontWeight: FONTS.weights.bold,
     fontSize: FONTS.sizes.small,
     textAlign: 'center',

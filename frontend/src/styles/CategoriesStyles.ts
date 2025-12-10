@@ -116,103 +116,92 @@ export const categoriesStyles = StyleSheet.create({
     color: COLORS.textLight,
     fontWeight: FONTS.weights.regular,
   },
-    fontSize: Typography.fontSize.sm,
-    color: Colors.gray[600],
-    lineHeight: 20,
-    marginBottom: Spacing.sm,
-  },
-
-  categoryMeta: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: Spacing.md,
-  },
 
   statusBadge: {
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: Spacing.xs,
+    paddingHorizontal: SPACING.sm,
+    paddingVertical: SPACING.xs,
     borderRadius: Border.radius.full,
-    marginRight: Spacing.sm,
+    marginRight: SPACING.sm,
   },
 
   statusBadgeActive: {
-    backgroundColor: Colors.success + '20',
+    backgroundColor: COLORS.success + '20',
   },
 
   statusBadgeInactive: {
-    backgroundColor: Colors.error + '20',
+    backgroundColor: COLORS.error + '20',
   },
 
   statusBadgeText: {
-    fontSize: Typography.fontSize.xs,
-    fontWeight: Typography.fontWeight.medium,
+    fontSize: FONTS.sizes.tiny,
+    fontWeight: FONTS.weights.medium,
   },
 
   statusBadgeTextActive: {
-    color: Colors.success,
+    color: COLORS.success,
   },
 
   statusBadgeTextInactive: {
-    color: Colors.error,
+    color: COLORS.error,
   },
 
   actionsContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    gap: Spacing.sm,
+    gap: SPACING.sm,
   },
 
   actionButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm,
     borderRadius: Border.radius.md,
     minWidth: 80,
     justifyContent: 'center',
   },
 
   editButton: {
-    backgroundColor: Colors.warning + '15',
+    backgroundColor: COLORS.warning + '15',
     borderWidth: 1,
-    borderColor: Colors.warning + '30',
+    borderColor: COLORS.warning + '30',
   },
 
   deleteButton: {
-    backgroundColor: Colors.error + '15',
+    backgroundColor: COLORS.error + '15',
     borderWidth: 1,
-    borderColor: Colors.error + '30',
+    borderColor: COLORS.error + '30',
   },
 
   actionButtonIcon: {
     fontSize: 14,
-    marginRight: Spacing.xs,
+    marginRight: SPACING.xs,
   },
 
   actionButtonText: {
-    fontSize: Typography.fontSize.xs,
-    fontWeight: Typography.fontWeight.medium,
+    fontSize: FONTS.sizes.tiny,
+    fontWeight: FONTS.weights.medium,
   },
 
   editButtonText: {
-    color: Colors.warning,
+    color: COLORS.warning,
   },
 
   deleteButtonText: {
-    color: Colors.error,
+    color: COLORS.error,
   },
 
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacing.xl,
+    padding: SPACING.xl,
   },
 
   loadingText: {
-    marginTop: Spacing.md,
-    fontSize: Typography.fontSize.base,
-    color: Colors.gray[600],
+    marginTop: SPACING.md,
+    fontSize: FONTS.sizes.body,
+    color: COLORS.textSecondary,
     textAlign: 'center',
   },
 
@@ -220,58 +209,58 @@ export const categoriesStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacing.xl,
+    padding: SPACING.xl,
   },
 
   errorIcon: {
     fontSize: 48,
-    marginBottom: Spacing.md,
+    marginBottom: SPACING.md,
   },
 
   errorText: {
-    fontSize: Typography.fontSize.base,
-    color: Colors.gray[600],
+    fontSize: FONTS.sizes.body,
+    color: COLORS.textSecondary,
     textAlign: 'center',
-    marginBottom: Spacing.lg,
+    marginBottom: SPACING.lg,
   },
 
   retryButton: {
-    backgroundColor: Colors.primary,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
+    backgroundColor: COLORS.primary,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
     borderRadius: Border.radius.md,
   },
 
   retryButtonText: {
-    color: Colors.white,
-    fontSize: Typography.fontSize.sm,
-    fontWeight: Typography.fontWeight.medium,
+    color: COLORS.textWhite,
+    fontSize: FONTS.sizes.body,
+    fontWeight: FONTS.weights.medium,
   },
 
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacing.xl,
+    padding: SPACING.xl,
   },
 
   emptyIcon: {
     fontSize: 64,
-    marginBottom: Spacing.lg,
+    marginBottom: SPACING.lg,
     opacity: 0.5,
   },
 
   emptyText: {
-    fontSize: Typography.fontSize.lg,
-    fontWeight: Typography.fontWeight.bold,
-    color: Colors.black,
+    fontSize: FONTS.sizes.h2,
+    fontWeight: FONTS.weights.bold,
+    color: COLORS.textPrimary,
     textAlign: 'center',
-    marginBottom: Spacing.sm,
+    marginBottom: SPACING.sm,
   },
 
   emptySubtext: {
-    fontSize: Typography.fontSize.sm,
-    color: Colors.gray[600],
+    fontSize: FONTS.sizes.body,
+    color: COLORS.textSecondary,
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -281,76 +270,76 @@ export const categoriesStyles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacing.lg,
+    padding: SPACING.lg,
   },
 
   modalContent: {
-    backgroundColor: Colors.white,
+    backgroundColor: COLORS.textWhite,
     borderRadius: Border.radius.xl,
     width: '100%',
     maxHeight: '80%',
-    ...Shadows.large,
+    ...SHADOW_STYLES.large,
   },
 
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: Spacing.lg,
+    padding: SPACING.lg,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.gray[200],
+    borderBottomColor: COLORS.gray[200],
   },
 
   modalTitle: {
-    fontSize: Typography.fontSize.lg,
-    fontWeight: Typography.fontWeight.bold,
-    color: Colors.black,
+    fontSize: FONTS.sizes.h2,
+    fontWeight: FONTS.weights.bold,
+    color: COLORS.textPrimary,
   },
 
   closeButton: {
     width: 32,
     height: 32,
     borderRadius: Border.radius.full,
-    backgroundColor: Colors.gray[100],
+    backgroundColor: COLORS.gray[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
 
   closeButtonText: {
     fontSize: 18,
-    color: Colors.gray[600],
-    fontWeight: Typography.fontWeight.bold,
+    color: COLORS.textSecondary,
+    fontWeight: FONTS.weights.bold,
   },
 
   formContainer: {
-    padding: Spacing.lg,
+    padding: SPACING.lg,
     maxHeight: 400,
   },
 
   inputGroup: {
-    marginBottom: Spacing.lg,
+    marginBottom: SPACING.lg,
   },
 
   inputLabel: {
-    fontSize: Typography.fontSize.sm,
-    fontWeight: Typography.fontWeight.medium,
-    color: Colors.black,
-    marginBottom: Spacing.xs,
+    fontSize: FONTS.sizes.body,
+    fontWeight: FONTS.weights.medium,
+    color: COLORS.textPrimary,
+    marginBottom: SPACING.xs,
   },
 
   input: {
     borderWidth: 1,
-    borderColor: Colors.gray[300],
+    borderColor: COLORS.gray[300],
     borderRadius: Border.radius.md,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-    fontSize: Typography.fontSize.base,
-    color: Colors.black,
-    backgroundColor: Colors.white,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm,
+    fontSize: FONTS.sizes.body,
+    color: COLORS.textPrimary,
+    backgroundColor: COLORS.textWhite,
   },
 
   inputFocused: {
-    borderColor: Colors.primary,
+    borderColor: COLORS.primary,
     borderWidth: 2,
   },
 
@@ -363,51 +352,51 @@ export const categoriesStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: Spacing.sm,
+    paddingVertical: SPACING.sm,
   },
 
   switchLabel: {
-    fontSize: Typography.fontSize.base,
-    color: Colors.black,
-    fontWeight: Typography.fontWeight.medium,
+    fontSize: FONTS.sizes.body,
+    color: COLORS.textPrimary,
+    fontWeight: FONTS.weights.medium,
   },
 
   modalButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: Spacing.lg,
+    padding: SPACING.lg,
     borderTopWidth: 1,
-    borderTopColor: Colors.gray[200],
-    gap: Spacing.md,
+    borderTopColor: COLORS.gray[200],
+    gap: SPACING.md,
   },
 
   modalButton: {
     flex: 1,
-    paddingVertical: Spacing.md,
+    paddingVertical: SPACING.md,
     borderRadius: Border.radius.md,
     alignItems: 'center',
   },
 
   cancelButton: {
-    backgroundColor: Colors.gray[100],
+    backgroundColor: COLORS.gray[100],
     borderWidth: 1,
-    borderColor: Colors.gray[300],
+    borderColor: COLORS.gray[300],
   },
 
   saveButton: {
-    backgroundColor: Colors.primary,
+    backgroundColor: COLORS.primary,
   },
 
   modalButtonText: {
-    fontSize: Typography.fontSize.base,
-    fontWeight: Typography.fontWeight.semibold,
+    fontSize: FONTS.sizes.body,
+    fontWeight: FONTS.weights.semibold,
   },
 
   cancelButtonText: {
-    color: Colors.gray[600],
+    color: COLORS.textSecondary,
   },
 
   saveButtonText: {
-    color: Colors.white,
+    color: COLORS.textWhite,
   },
 });

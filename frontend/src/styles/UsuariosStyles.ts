@@ -55,13 +55,13 @@ export const usersStyles = StyleSheet.create({
   },
 
   addButtonIcon: {
-    color: COLORS.white,
+    color: COLORS.textWhite,
     fontSize: FONTS.sizes.body,
     marginRight: SPACING.xs,
   },
 
   addButtonText: {
-    color: COLORS.white,
+    color: COLORS.textWhite,
     fontSize: FONTS.sizes.small,
     fontWeight: FONTS.weights.semibold,
   },
@@ -111,7 +111,7 @@ export const usersStyles = StyleSheet.create({
   },
 
   retryButtonText: {
-    color: COLORS.white,
+    color: COLORS.textWhite,
     fontSize: FONTS.sizes.body,
     fontWeight: FONTS.weights.semibold,
   },
@@ -207,7 +207,7 @@ export const usersStyles = StyleSheet.create({
   },
 
   roleBadgeText: {
-    color: COLORS.white,
+    color: COLORS.textWhite,
     fontSize: FONTS.sizes.tiny, // 'xs' mapeado a tiny
     fontWeight: FONTS.weights.semibold,
   },
@@ -227,7 +227,7 @@ export const usersStyles = StyleSheet.create({
   },
 
   statusBadgeText: {
-    color: COLORS.white,
+    color: COLORS.textWhite,
     fontSize: FONTS.sizes.tiny,
     fontWeight: FONTS.weights.semibold,
   },
@@ -258,13 +258,13 @@ export const usersStyles = StyleSheet.create({
   },
 
   actionButtonIcon: {
-    color: COLORS.white,
+    color: COLORS.textWhite,
     fontSize: FONTS.sizes.small,
     marginRight: SPACING.xs,
   },
 
   actionButtonText: {
-    color: COLORS.white,
+    color: COLORS.textWhite,
     fontSize: FONTS.sizes.small,
     fontWeight: FONTS.weights.medium,
   },
@@ -403,6 +403,6 @@ export const usersStyles = StyleSheet.create({
   },
 
   saveButtonText: {
-    color: COLORS.white,
+    color: COLORS.textWhite,
   },
 });

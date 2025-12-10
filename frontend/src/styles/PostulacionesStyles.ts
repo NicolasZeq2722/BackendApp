@@ -106,3 +106,4 @@ export const postulacionesStyles = StyleSheet.create({
     color: COLORS.textSecondary,
     marginTop: SPACING.lg,
   },
+});

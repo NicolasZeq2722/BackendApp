@@ -117,3 +117,4 @@ export const citacionesStyles = StyleSheet.create({
     color: COLORS.textSecondary,
     marginTop: SPACING.lg,
   },
+});
