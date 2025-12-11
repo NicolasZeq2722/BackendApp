@@ -11,6 +11,9 @@ import LoginScreen from '../screens/LoginScreen';
 // Pantallas - Autenticadas
 import HomeScreen from '../screens/HomeScreen';
 import OfertasScreen from '../screens/OfertasScreen';
+import ReclutadorOfertasScreen from '../screens/ReclutadorOfertasScreen';
+import ReclutadorDashboardScreen from '../screens/ReclutadorDashboardScreen';
+import GestionarCandidatosScreen from '../screens/GestionarCandidatosScreen';
 import DetalleOfertaScreen from '../screens/DetalleOfertaScreen';
 import PostulacionesScreen from '../screens/PostulacionesScreen';
 import CitacionesScreen from '../screens/CitacionesScreen';
@@ -55,6 +58,21 @@ export default function RootNavigator() {
             name="Ofertas" 
             component={OfertasScreen}
             options={{ title: 'Ofertas' }}
+          />
+          <Stack.Screen 
+            name="ReclutadorOfertas" 
+            component={ReclutadorOfertasScreen}
+            options={{ title: 'Mis Ofertas' }}
+          />
+          <Stack.Screen 
+            name="ReclutadorDashboard" 
+            component={ReclutadorDashboardScreen}
+            options={{ title: 'Panel de Reclutador' }}
+          />
+          <Stack.Screen 
+            name="GestionarCandidatos" 
+            component={GestionarCandidatosScreen}
+            options={{ title: 'Gestionar Candidatos' }}
           />
           <Stack.Screen 
             name="DetalleOferta" 

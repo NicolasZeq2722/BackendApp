@@ -1,183 +1,326 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
-  Alert,
-  FlatList,
-  ActivityIndicator,
   StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+  Alert,
+  TextInput,
   RefreshControl,
-} from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
-import { postulacionService, authService } from "../services/api";
+  Dimensions,
+} from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import postulacionService, { Postulacion } from '../services/postulacionService';
+
+const { width } = Dimensions.get('window');
+
+// Colores y estilos base
+const COLORES = {
+  principal: '#FF6B35',
+  acento: '#004E89',
+  fondo: '#F5F7FA',
+  blanco: '#FFFFFF',
+  gris: '#E0E0E0',
+  grisOscuro: '#757575',
+  texto: '#333333',
+  textoClaro: '#666666',
+  verde: '#4CAF50',
+  naranja: '#FF9800',
+  rojo: '#F44336',
+  azul: '#2196F3',
+  border: '#E0E0E0',
+};
+
+const ESPACIADOS = {
+  xs: 4,
+  sm: 8,
+  md: 12,
+  lg: 16,
+  xl: 20,
+  xxl: 24,
+};
+
+const TAMAÑOS_FUENTE = {
+  xs: 12,
+  sm: 13,
+  md: 14,
+  lg: 16,
+  xl: 18,
+  xxl: 20,
+};
+
+const RADIOS = {
+  sm: 4,
+  md: 8,
+  lg: 12,
+  xl: 16,
+};
 
 const PostulacionesScreen = ({ navigation }: any) => {
-  const [postulaciones, setPostulaciones] = useState<any[]>([]);
+  const [postulaciones, setPostulaciones] = useState<Postulacion[]>([]);
+  const [postulacionesFiltradas, setPostulacionesFiltradas] = useState<Postulacion[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [filtroEstado, setFiltroEstado] = useState<string>('TODOS');
+  const [busqueda, setBusqueda] = useState('');
+  const [mostrarOpcionesEliminar, setMostrarOpcionesEliminar] = useState<number | null>(null);
 
-  useEffect(() => {
-    loadUser();
-  }, []);
-
-  // 🔄 useFocusEffect: Recargar postulaciones CADA VEZ que la pantalla recibe foco
-  // Esto limpia postulaciones fantasma cuando se elimina una oferta
+  // Cargar datos cuando la pantalla obtiene el foco
   useFocusEffect(
     useCallback(() => {
-      console.log("🔄 PostulacionesScreen en foco - Recargando postulaciones...");
-      loadPostulaciones();
-
-      // Función de limpieza (opcional)
-      return () => {
-        console.log("📴 PostulacionesScreen desenfocada");
-      };
+      cargarDatos();
     }, [])
   );
 
-  const loadUser = async () => {
+  const cargarDatos = async () => {
     try {
-      const currentUser = await authService.getCurrentUser();
-      setUser(currentUser);
+      setLoading(true);
+      const userData = await AsyncStorage.getItem('user');
+      const userParsed = userData ? JSON.parse(userData) : null;
+      setUser(userParsed);
+
+      if (userParsed?.id) {
+        await cargarPostulaciones(userParsed.id);
+      }
     } catch (error) {
-      console.error("Error loading user:", error);
+      console.error('Error cargando datos:', error);
+      Alert.alert('Error', 'No se pudieron cargar tus postulaciones');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const loadPostulaciones = async () => {
+  const cargarPostulaciones = async (usuarioId: number) => {
     try {
       setLoading(true);
-      const currentUser = await authService.getCurrentUser();
-      setUser(currentUser);
-
-      if (currentUser?.role === "ASPIRANTE" && currentUser?.id) {
-        const response = await postulacionService.getByAspirante(currentUser.id);
-        setPostulaciones(response.data || []);
-      } else if (currentUser?.role === "RECLUTADOR" && currentUser?.id) {
-        const response = await postulacionService.getByReclutador(currentUser.id);
-        setPostulaciones(response.data || []);
-      } else if (currentUser?.role === "ADMIN") {
-        const response = await postulacionService.getAll();
-        setPostulaciones(response.data || []);
-      }
-    } catch (error) {
-      console.error("Error loading postulaciones:", error);
-      Alert.alert("Error", "No se pudieron cargar las postulaciones");
+      const data = await postulacionService.getMisPostulaciones(usuarioId);
+      setPostulaciones(data || []);
+      aplicarFiltros(data || [], filtroEstado, busqueda);
+    } catch (error: any) {
+      console.error('Error cargando postulaciones:', error);
+      Alert.alert('Error', 'No se pudieron cargar tus postulaciones');
     } finally {
       setLoading(false);
     }
   };
 
   const onRefresh = async () => {
+    setRefreshing(true);
     try {
-      setRefreshing(true);
-      await loadPostulaciones();
+      if (user?.id) {
+        await cargarPostulaciones(user.id);
+      }
     } finally {
       setRefreshing(false);
     }
   };
 
-  const getEstadoColor = (estado: string) => {
+  const aplicarFiltros = (datos: Postulacion[], estado: string, buscar: string) => {
+    let resultado = datos;
+
+    // Filtrar por estado
+    if (estado !== 'TODOS') {
+      resultado = resultado.filter((p) => p.estado === estado);
+    }
+
+    // Filtrar por búsqueda
+    if (buscar.trim()) {
+      const termino = buscar.toLowerCase();
+      resultado = resultado.filter(
+        (p) =>
+          p.ofertaTitulo?.toLowerCase().includes(termino) ||
+          p.ofertaEmpresa?.toLowerCase().includes(termino) ||
+          p.aspiranteNombre?.toLowerCase().includes(termino)
+      );
+    }
+
+    setPostulacionesFiltradas(resultado);
+  };
+
+  const handleBusqueda = (texto: string) => {
+    setBusqueda(texto);
+    aplicarFiltros(postulaciones, filtroEstado, texto);
+  };
+
+  const handleFiltroEstado = (estado: string) => {
+    setFiltroEstado(estado);
+    aplicarFiltros(postulaciones, estado, busqueda);
+  };
+
+  const handleCancelarPostulacion = async (postulacionId: number) => {
+    Alert.alert(
+      'Cancelar Postulación',
+      '¿Estás seguro que deseas cancelar esta postulación?',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Sí, cancelar',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              if (!user?.id) {
+                Alert.alert('Error', 'Usuario no identificado');
+                return;
+              }
+              await postulacionService.cancelar(postulacionId, user.id);
+              Alert.alert('Éxito', 'Postulación cancelada');
+              await cargarPostulaciones(user.id);
+              setMostrarOpcionesEliminar(null);
+            } catch (error: any) {
+              Alert.alert('Error', error.message || 'No se pudo cancelar la postulación');
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  const getEstadoBadgeColor = (estado: string) => {
     switch (estado) {
-      case "ACEPTADA":
-        return "#4CAF50";
-      case "RECHAZADA":
-        return "#f44336";
-      case "ENVIADA":
-        return "#FF9800";
-      case "EN_REVISION":
-        return "#2196F3";
+      case 'ACEPTADA':
+        return COLORES.verde;
+      case 'RECHAZADA':
+        return COLORES.rojo;
+      case 'PENDIENTE':
+        return COLORES.naranja;
+      case 'CANCELADA':
+        return COLORES.grisOscuro;
       default:
-        return "#999";
+        return COLORES.azul;
     }
   };
 
-  const renderPostulacion = ({ item }: any) => {
-    // ✅ Validar que exista oferta antes de navegar
-    const handleNavigateToOferta = () => {
-      // 🔍 DEPURACIÓN: Log del objeto postulación
-      console.log("📦 Objeto postulación completo:", JSON.stringify(item, null, 2));
-      
-      // Intentar obtener ID de oferta de varias formas posibles
-      // Orden de preferencia: item.oferta.id > item.ofertaId
-      const ofertaId = item.oferta?.id || item.ofertaId;
-      
-      console.log("🔍 Buscando ofertaId...");
-      console.log("   - item.oferta?.id:", item.oferta?.id);
-      console.log("   - item.ofertaId:", item.ofertaId);
-      console.log("   - ofertaId final:", ofertaId);
-      
-      if (!ofertaId) {
-        console.error("❌ No se encontró ofertaId en la postulación:", item);
-        Alert.alert(
-          "Error",
-          "Los datos de la oferta no están disponibles. Por favor intente más tarde.",
-          [{ text: "OK" }]
-        );
-        return;
-      }
-      
-      console.log("✅ Navegando a DetalleOferta con ofertaId:", ofertaId);
-      navigation.navigate('DetalleOferta', { ofertaId });
-    };
+  const formatearFecha = (fecha: string) => {
+    const date = new Date(fecha);
+    return date.toLocaleDateString('es-ES', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+  };
 
-    return (
-      <TouchableOpacity
-        style={styles.postulacionCard}
-        onPress={handleNavigateToOferta}
-      >
-        <View style={styles.headerRow}>
-          <Text style={styles.ofertaTitulo} numberOfLines={2}>
-            {item.ofertaTitulo || item.oferta?.titulo || "Oferta sin título"}
+  const renderPostulacionItem = ({ item }: { item: Postulacion }) => (
+    <TouchableOpacity
+      style={styles.postulacionCard}
+      onPress={() => setMostrarOpcionesEliminar(mostrarOpcionesEliminar === item.id ? null : item.id)}
+    >
+      {/* Header */}
+      <View style={styles.cardHeader}>
+        <View style={styles.tituloContainer}>
+          <Text style={styles.titulo} numberOfLines={2}>
+            {item.ofertaTitulo || 'Sin título'}
           </Text>
-          <View style={[styles.estatusBadge, { backgroundColor: getEstadoColor(item.estado) }]}>
-            <Text style={styles.estatusText}>{item.estado}</Text>
-          </View>
+          <Text style={styles.empresa}>{item.ofertaEmpresa || 'Empresa desconocida'}</Text>
         </View>
-
-        <Text style={styles.empresa}>{item.empresa || item.oferta?.empresa || "Empresa desconocida"}</Text>
-
-        <View style={styles.infoRow}>
-          <Text style={styles.label}>Postulación:</Text>
-          <Text style={styles.value}>{new Date(item.fechaPostulacion).toLocaleDateString()}</Text>
+        <View style={[styles.estadoBadge, { backgroundColor: getEstadoBadgeColor(item.estado) }]}>
+          <Text style={styles.estadoText}>{item.estado}</Text>
+        </View>
       </View>
 
-      {item.feedback && (
-        <View style={styles.feedbackContainer}>
-          <Text style={styles.feedbackLabel}>Feedback:</Text>
-          <Text style={styles.feedbackText}>{item.feedback}</Text>
-        </View>
-      )}
+      {/* Detalles */}
+      <View style={styles.detalles}>
+        <Text style={styles.detalleText}>
+          📅 Postulación: {formatearFecha(item.fechaPostulacion)}
+        </Text>
+        {item.fechaRespuesta && (
+          <Text style={styles.detalleText}>📅 Respuesta: {formatearFecha(item.fechaRespuesta)}</Text>
+        )}
+        {item.comentarios && (
+          <Text style={styles.comentarios} numberOfLines={2}>
+            💬 {item.comentarios}
+          </Text>
+        )}
+      </View>
 
-      {item.estado === "EN_REVISION" && (
-        <View style={styles.reviewingBadge}>
-          <Text style={styles.reviewingText}>⏳ En revisión...</Text>
+      {/* Opciones expandibles */}
+      {mostrarOpcionesEliminar === item.id && item.estado === 'PENDIENTE' && (
+        <View style={styles.opcionesContainer}>
+          <TouchableOpacity
+            style={[styles.btnOpcion, styles.btnCancelar]}
+            onPress={() => handleCancelarPostulacion(item.id)}
+          >
+            <Text style={styles.btnTexto}>Cancelar Postulación</Text>
+          </TouchableOpacity>
         </View>
       )}
     </TouchableOpacity>
-    );
-  };  if (loading) {
+  );
+
+  if (loading) {
     return (
       <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#FF6B35" />
+        <ActivityIndicator size="large" color={COLORES.principal} />
+        <Text style={styles.loadingText}>Cargando postulaciones...</Text>
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={postulaciones}
-        renderItem={renderPostulacion}
-        keyExtractor={(item) => item.id.toString()}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-        ListEmptyComponent={
-          <View style={styles.centerContainer}>
-            <Text style={styles.emptyText}>📝 Sin postulaciones</Text>
-          </View>
-        }
-      />
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Mis Postulaciones</Text>
+        <Text style={styles.headerSubtitle}>{postulacionesFiltradas.length} postulaciones</Text>
+      </View>
+
+      {/* Búsqueda */}
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Buscar por oferta, empresa..."
+          value={busqueda}
+          onChangeText={handleBusqueda}
+          placeholderTextColor={COLORES.grisOscuro}
+        />
+      </View>
+
+      {/* Filtros */}
+      <View style={styles.filtrosContainer}>
+        {['TODOS', 'PENDIENTE', 'ACEPTADA', 'RECHAZADA', 'CANCELADA'].map((estado) => (
+          <TouchableOpacity
+            key={estado}
+            style={[
+              styles.filtroBtn,
+              filtroEstado === estado && styles.filtroBtnActivo,
+            ]}
+            onPress={() => handleFiltroEstado(estado)}
+          >
+            <Text
+              style={[
+                styles.filtroBtnText,
+                filtroEstado === estado && styles.filtroBtnTextActivo,
+              ]}
+            >
+              {estado === 'TODOS' ? '📊 Todos' : estado}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      {/* Lista de postulaciones */}
+      {postulacionesFiltradas.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyTitle}>📭 Sin postulaciones</Text>
+          <Text style={styles.emptyText}>
+            {busqueda || filtroEstado !== 'TODOS'
+              ? 'No hay postulaciones que coincidan con tu búsqueda'
+              : 'Aún no tienes postulaciones. ¡Empieza a postularte a ofertas!'}
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={postulacionesFiltradas}
+          renderItem={renderPostulacionItem}
+          keyExtractor={(item) => item.id.toString()}
+          scrollEnabled
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          contentContainerStyle={styles.listContent}
+        />
+      )}
     </View>
   );
 };
@@ -185,104 +328,172 @@ const PostulacionesScreen = ({ navigation }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
-    paddingHorizontal: 12,
+    backgroundColor: COLORES.fondo,
   },
   centerContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: COLORES.fondo,
+  },
+  loadingText: {
+    marginTop: ESPACIADOS.md,
+    fontSize: TAMAÑOS_FUENTE.md,
+    color: COLORES.textoClaro,
+  },
+  header: {
+    backgroundColor: COLORES.principal,
+    paddingHorizontal: ESPACIADOS.lg,
+    paddingTop: ESPACIADOS.xl,
+    paddingBottom: ESPACIADOS.lg,
+  },
+  headerTitle: {
+    fontSize: TAMAÑOS_FUENTE.xxl,
+    fontWeight: 'bold',
+    color: COLORES.blanco,
+  },
+  headerSubtitle: {
+    fontSize: TAMAÑOS_FUENTE.sm,
+    color: 'rgba(255,255,255,0.8)',
+    marginTop: ESPACIADOS.sm,
+  },
+  searchContainer: {
+    paddingHorizontal: ESPACIADOS.lg,
+    paddingVertical: ESPACIADOS.md,
+  },
+  searchInput: {
+    backgroundColor: COLORES.blanco,
+    borderRadius: RADIOS.lg,
+    paddingHorizontal: ESPACIADOS.lg,
+    paddingVertical: ESPACIADOS.md,
+    fontSize: TAMAÑOS_FUENTE.md,
+    borderWidth: 1,
+    borderColor: COLORES.border,
+    color: COLORES.texto,
+  },
+  filtrosContainer: {
+    paddingHorizontal: ESPACIADOS.lg,
+    paddingVertical: ESPACIADOS.md,
+    flexDirection: 'row',
+    gap: ESPACIADOS.sm,
+    flexWrap: 'wrap',
+  },
+  filtroBtn: {
+    paddingHorizontal: ESPACIADOS.md,
+    paddingVertical: ESPACIADOS.sm,
+    borderRadius: RADIOS.lg,
+    backgroundColor: COLORES.blanco,
+    borderWidth: 1,
+    borderColor: COLORES.border,
+  },
+  filtroBtnActivo: {
+    backgroundColor: COLORES.principal,
+    borderColor: COLORES.principal,
+  },
+  filtroBtnText: {
+    fontSize: TAMAÑOS_FUENTE.sm,
+    color: COLORES.texto,
+  },
+  filtroBtnTextActivo: {
+    color: COLORES.blanco,
+    fontWeight: 'bold',
+  },
+  listContent: {
+    paddingHorizontal: ESPACIADOS.lg,
+    paddingVertical: ESPACIADOS.md,
+    gap: ESPACIADOS.md,
   },
   postulacionCard: {
-    backgroundColor: "white",
-    borderRadius: 8,
-    padding: 14,
-    marginVertical: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
+    backgroundColor: COLORES.blanco,
+    borderRadius: RADIOS.lg,
+    borderLeftWidth: 4,
+    borderLeftColor: COLORES.principal,
+    paddingHorizontal: ESPACIADOS.lg,
+    paddingVertical: ESPACIADOS.lg,
+    marginBottom: ESPACIADOS.md,
   },
-  headerRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    marginBottom: 8,
+  cardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: ESPACIADOS.md,
   },
-  ofertaTitulo: {
-    fontSize: 15,
-    fontWeight: "bold",
-    color: "#333",
+  tituloContainer: {
     flex: 1,
-    marginRight: 8,
+    marginRight: ESPACIADOS.md,
+  },
+  titulo: {
+    fontSize: TAMAÑOS_FUENTE.lg,
+    fontWeight: 'bold',
+    color: COLORES.texto,
+    marginBottom: ESPACIADOS.sm,
   },
   empresa: {
-    fontSize: 13,
-    color: "#666",
-    marginBottom: 8,
+    fontSize: TAMAÑOS_FUENTE.sm,
+    color: COLORES.textoClaro,
   },
-  estatusBadge: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
+  estadoBadge: {
+    paddingHorizontal: ESPACIADOS.md,
+    paddingVertical: ESPACIADOS.sm,
+    borderRadius: RADIOS.md,
   },
-  estatusText: {
-    color: "white",
-    fontSize: 11,
-    fontWeight: "600",
+  estadoText: {
+    color: COLORES.blanco,
+    fontSize: TAMAÑOS_FUENTE.sm,
+    fontWeight: 'bold',
   },
-  infoRow: {
-    flexDirection: "row",
-    marginVertical: 4,
+  detalles: {
+    marginVertical: ESPACIADOS.md,
   },
-  label: {
-    fontSize: 12,
-    fontWeight: "600",
-    color: "#666",
-    minWidth: 70,
+  detalleText: {
+    fontSize: TAMAÑOS_FUENTE.sm,
+    color: COLORES.textoClaro,
+    marginBottom: ESPACIADOS.sm,
   },
-  value: {
-    fontSize: 12,
-    color: "#333",
+  comentarios: {
+    fontSize: TAMAÑOS_FUENTE.sm,
+    color: COLORES.textoClaro,
+    fontStyle: 'italic',
+    marginTop: ESPACIADOS.md,
+    paddingLeft: ESPACIADOS.md,
+    borderLeftWidth: 2,
+    borderLeftColor: COLORES.principal,
+  },
+  opcionesContainer: {
+    marginTop: ESPACIADOS.md,
+    paddingTop: ESPACIADOS.md,
+    borderTopWidth: 1,
+    borderTopColor: COLORES.border,
+  },
+  btnOpcion: {
+    paddingVertical: ESPACIADOS.md,
+    borderRadius: RADIOS.md,
+    alignItems: 'center',
+  },
+  btnCancelar: {
+    backgroundColor: COLORES.rojo,
+  },
+  btnTexto: {
+    color: COLORES.blanco,
+    fontSize: TAMAÑOS_FUENTE.md,
+    fontWeight: 'bold',
+  },
+  emptyContainer: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: ESPACIADOS.lg,
   },
-  feedbackContainer: {
-    backgroundColor: "#f9f9f9",
-    borderLeftWidth: 3,
-    borderLeftColor: "#FF9800",
-    padding: 10,
-    marginTop: 8,
-    borderRadius: 4,
-  },
-  feedbackLabel: {
-    fontSize: 11,
-    fontWeight: "600",
-    color: "#666",
-    marginBottom: 4,
-  },
-  feedbackText: {
-    fontSize: 12,
-    color: "#333",
-    lineHeight: 16,
-  },
-  reviewingBadge: {
-    backgroundColor: "#e3f2fd",
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-    borderRadius: 4,
-    marginTop: 8,
-    alignItems: "center",
-  },
-  reviewingText: {
-    color: "#2196F3",
-    fontSize: 12,
-    fontWeight: "600",
+  emptyTitle: {
+    fontSize: TAMAÑOS_FUENTE.xl,
+    fontWeight: 'bold',
+    color: COLORES.texto,
+    marginBottom: ESPACIADOS.md,
   },
   emptyText: {
-    fontSize: 16,
-    color: "#999",
-    textAlign: "center",
+    fontSize: TAMAÑOS_FUENTE.md,
+    color: COLORES.textoClaro,
+    textAlign: 'center',
   },
 });
 

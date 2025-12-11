@@ -8,7 +8,8 @@ import {
   Alert,
   StyleSheet,
 } from "react-native";
-import { ofertaService, postulacionService, authService } from "../services/api";
+import { ofertaService, authService } from "../services/api";
+import postulacionService from "../services/postulacionService";
 
 const DetalleOfertaScreen = ({ navigation, route }: any) => {
   const { ofertaId } = route.params || {};
@@ -52,8 +53,8 @@ const DetalleOfertaScreen = ({ navigation, route }: any) => {
     // Verificar si ya se postuló
     if (currentUser?.role === "ASPIRANTE" && currentUser?.id) {
       try {
-        const response = await postulacionService.getByAspirante(currentUser.id);
-        const yaPostulada = response.data?.some((p: any) => p.ofertaId === Number(ofertaId));
+        const postulaciones = await postulacionService.getMisPostulaciones(currentUser.id);
+        const yaPostulada = postulaciones?.some((p: any) => p.ofertaId === Number(ofertaId));
         setYaPostulado(yaPostulada);
       } catch (err) {
         // @ts-ignore
@@ -80,11 +81,11 @@ const DetalleOfertaScreen = ({ navigation, route }: any) => {
 
     setPostulando(true);
     try {
-      await postulacionService.postularse(ofertaId, user.id);
+      await postulacionService.create(Number(ofertaId), user.id);
       Alert.alert("Éxito", "Te has postulado exitosamente");
       setYaPostulado(true);
     } catch (err: any) {
-      Alert.alert("Error", err.response?.data?.message || "Error al postularse");
+      Alert.alert("Error", err.message || "Error al postularse");
     } finally {
       setPostulando(false);
     }

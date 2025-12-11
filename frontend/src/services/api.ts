@@ -26,13 +26,79 @@ api.interceptors.request.use(
 
 // ======================== AUTH SERVICE ========================
 export const authService = {
-  login: async (username: string, password: string) => {
-    const response = await api.post("/auth/login", { username, password });
-    if (response.data.token) {
-      await AsyncStorage.setItem("token", response.data.token);
-      await AsyncStorage.setItem("user", JSON.stringify(response.data));
+  /**
+   * Verificar conexión al backend y estado del admin
+   */
+  debugAdmin: async () => {
+    try {
+      console.log("🔍 Verificando admin en backend...");
+      const response = await api.get("/auth/debug/admin");
+      console.log("✅ Debug Admin Response:", response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error("❌ Error en debug admin:", error.response?.status, error.response?.data || error.message);
+      throw error;
     }
-    return response.data;
+  },
+
+  /**
+   * Inicializar BD con datos de ejemplo (SOLO DESARROLLO)
+   */
+  initializeData: async () => {
+    try {
+      console.log("🔄 Inicializando BD con datos de ejemplo...");
+      const response = await api.post("/init/data");
+      console.log("✅ BD inicializada:", response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error("❌ Error inicializando BD:", error.message);
+      throw error;
+    }
+  },
+
+  /**
+   * Verificar estado de inicialización
+   */
+  initStatus: async () => {
+    try {
+      const response = await api.get("/init/status");
+      return response.data;
+    } catch (error: any) {
+      throw error;
+    }
+  },
+
+  /**
+   * Resetear BD (SOLO DESARROLLO)
+   */
+  resetDatabase: async () => {
+    try {
+      console.log("⚠️ Reseteando base de datos...");
+      const response = await api.post("/init/reset");
+      console.log("✅ BD reseteada:", response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error("❌ Error reseteando BD:", error.message);
+      throw error;
+    }
+  },
+
+  login: async (username: string, password: string) => {
+    // El backend espera 'correo' y 'password', no 'username' y 'password'
+    const loginPayload = { correo: username, password };
+    console.log("📤 Enviando login con payload:", loginPayload);
+    try {
+      const response = await api.post("/auth/login", loginPayload);
+      console.log("✅ Login exitoso, respuesta:", response.data);
+      if (response.data.token) {
+        await AsyncStorage.setItem("token", response.data.token);
+        await AsyncStorage.setItem("user", JSON.stringify(response.data));
+      }
+      return response.data;
+    } catch (error: any) {
+      console.error("❌ Error en login:", error.response?.status, error.response?.data || error.message);
+      throw error;
+    }
   },
 
   register: async (data: any) => {
@@ -53,17 +119,79 @@ export const authService = {
 
 // ======================== OFERTA SERVICE ========================
 export const ofertaService = {
-  getAll: () => api.get("/oferta"),
-  getById: (id: number) => api.get(`/oferta/${id}`),
-  getByReclutador: (reclutadorId: number) => api.get(`/oferta/reclutador/${reclutadorId}`),
-  search: (titulo: string) => api.get(`/oferta/buscar/titulo?titulo=${titulo}`),
-  searchByUbicacion: (ubicacion: string) => api.get(`/oferta/buscar/ubicacion?ubicacion=${ubicacion}`),
-  create: (data: any, reclutadorId: number) => 
-    api.post(`/oferta?reclutadorId=${reclutadorId}`, data),
-  update: (id: number, data: any, reclutadorId: number) => 
-    api.put(`/oferta/${id}?reclutadorId=${reclutadorId}`, data),
-  delete: (id: number, reclutadorId: number) => 
-    api.delete(`/oferta/${id}?reclutadorId=${reclutadorId}`),
+  /**
+   * Obtener todas las ofertas
+   */
+  getAll: async () => {
+    const response = await api.get("/oferta");
+    return response.data;
+  },
+
+  /**
+   * Obtener una oferta por ID
+   */
+  getById: async (id: number) => {
+    const response = await api.get(`/oferta/${id}`);
+    return response.data;
+  },
+
+  /**
+   * Obtener ofertas de un reclutador específico
+   */
+  getByReclutador: async (reclutadorId: number) => {
+    const response = await api.get(`/oferta/reclutador/${reclutadorId}`);
+    return response.data;
+  },
+
+  /**
+   * Buscar ofertas por título
+   */
+  search: async (titulo: string) => {
+    const response = await api.get(`/oferta/buscar`, {
+      params: { titulo }
+    });
+    return response.data;
+  },
+
+  /**
+   * Buscar ofertas por estado
+   */
+  getByEstado: async (estado: 'ABIERTA' | 'CERRADA' | 'PAUSADA') => {
+    const response = await api.get(`/oferta/estado/${estado}`);
+    return response.data;
+  },
+
+  /**
+   * Crear una nueva oferta
+   */
+  create: async (data: any) => {
+    const response = await api.post(`/oferta`, data);
+    return response.data;
+  },
+
+  /**
+   * Actualizar una oferta existente
+   */
+  update: async (id: number, data: any) => {
+    const response = await api.put(`/oferta/${id}`, data);
+    return response.data;
+  },
+
+  /**
+   * Eliminar una oferta
+   */
+  delete: async (id: number) => {
+    const response = await api.delete(`/oferta/${id}`);
+    return response.data;
+  },
+
+  /**
+   * Filtrar ofertas por modalidad
+   */
+  getByModalidad: async (modalidad: 'PRESENCIAL' | 'REMOTO' | 'HIBRIDO') => {
+    const response = await api.get(`/oferta/modalidad/${modalidad}`);
+    return response.data;
+  },
 };
 
 // ======================== POSTULACION SERVICE ========================
@@ -117,6 +245,66 @@ export const usuarioService = {
   create: (data: any) => api.post("/users", data),
   update: (id: number, data: any) => api.put(`/users/${id}`, data),
   delete: (id: number) => api.delete(`/users/${id}`),
+};
+
+// ======================== ASPIRANTE SERVICE ========================
+export const aspiranteService = {
+  getAll: async () => {
+    const response = await api.get("/aspirante");
+    return response.data;
+  },
+  getById: async (id: number) => {
+    const response = await api.get(`/aspirante/${id}`);
+    return response.data;
+  },
+  getMe: async () => {
+    const response = await api.get("/aspirante/me");
+    return response.data;
+  },
+  create: async (data: any) => {
+    const response = await api.post("/aspirante/public", data);
+    return response.data;
+  },
+  update: async (id: number, data: any) => {
+    const response = await api.put(`/aspirante/${id}`, data);
+    return response.data;
+  },
+  activate: async (id: number) => {
+    const response = await api.put(`/aspirante/${id}/activar`);
+    return response.data;
+  },
+  deactivate: async (id: number) => {
+    const response = await api.put(`/aspirante/${id}/desactivar`);
+    return response.data;
+  },
+  delete: async (id: number) => {
+    const response = await api.delete(`/aspirante/${id}`);
+    return response.data;
+  },
+};
+
+// ======================== RECLUTADOR SERVICE (Base) ========================
+export const reclutadorService = {
+  getAll: async () => {
+    const response = await api.get("/reclutador");
+    return response.data;
+  },
+  getById: async (id: number) => {
+    const response = await api.get(`/reclutador/${id}`);
+    return response.data;
+  },
+  create: async (data: any) => {
+    const response = await api.post("/reclutador", data);
+    return response.data;
+  },
+  update: async (id: number, data: any) => {
+    const response = await api.put(`/reclutador/${id}`, data);
+    return response.data;
+  },
+  delete: async (id: number) => {
+    const response = await api.delete(`/reclutador/${id}`);
+    return response.data;
+  },
 };
 
 export default api;

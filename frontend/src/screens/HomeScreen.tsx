@@ -29,18 +29,21 @@ const HomeScreen = ({ navigation }: any) => {
     try {
       setLoading(true);
       const stats: any = {};
+      
+      // Determinar el rol del usuario (soportar ambas nomenclaturas: role y rol)
+      const userRole = user?.role || user?.rol;
 
-      if (user?.role === "ASPIRANTE") {
+      if (userRole === "ASPIRANTE") {
         const postulaciones = await postulacionService.getByAspirante(user.id);
         const notificaciones = await notificacionService.getNoLeidas(user.id);
         stats.postulaciones = postulaciones.data?.length || 0;
         stats.notificacionesNoLeidas = notificaciones.data?.length || 0;
-      } else if (user?.role === "RECLUTADOR") {
+      } else if (userRole === "RECLUTADOR") {
         const ofertas = await ofertaService.getAll();
         const postulaciones = await postulacionService.getByReclutador(user.id);
         stats.ofertas = ofertas.data?.filter((o: any) => o.reclutadorId === user.id).length || 0;
         stats.postulaciones = postulaciones.data?.length || 0;
-      } else if (user?.role === "ADMIN") {
+      } else if (userRole === "ADMIN") {
         const ofertas = await ofertaService.getAll();
         stats.ofertas = ofertas.data?.length || 0;
       }
@@ -121,7 +124,7 @@ const HomeScreen = ({ navigation }: any) => {
         </View>
         <View style={styles.statCard}>
           <Text style={styles.statNumber}>{stats.postulaciones || 0}</Text>
-          <Text style={styles.statLabel}>Postulaciones</Text>
+          <Text style={styles.statLabel}>Candidatos</Text>
         </View>
       </View>
 
@@ -129,17 +132,24 @@ const HomeScreen = ({ navigation }: any) => {
         <Text style={styles.sectionTitle}>Acciones Rápidas</Text>
         <TouchableOpacity
           style={styles.actionButton}
+          onPress={() => navigation.navigate('ReclutadorDashboard')}
+        >
+          <Text style={styles.actionButtonEmoji}>📊</Text>
+          <Text style={styles.actionButtonText}>Panel de Control</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={() => navigation.navigate('ReclutadorOfertas')}
+        >
+          <Text style={styles.actionButtonEmoji}>💼</Text>
+          <Text style={styles.actionButtonText}>Mis Ofertas</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.actionButton}
           onPress={() => navigation.navigate('CrearOferta')}
         >
           <Text style={styles.actionButtonEmoji}>➕</Text>
           <Text style={styles.actionButtonText}>Nueva Oferta</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.actionButton}
-          onPress={() => navigation.navigate('Postulaciones')}
-        >
-          <Text style={styles.actionButtonEmoji}>📝</Text>
-          <Text style={styles.actionButtonText}>Postulaciones Recibidas</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.actionButton}
